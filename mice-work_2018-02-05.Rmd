@@ -2,7 +2,7 @@
 title: "Untitled"
 author: "Emile Latour"
 date: "February 5, 2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
