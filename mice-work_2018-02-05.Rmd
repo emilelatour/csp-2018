@@ -1,0 +1,527 @@
+---
+title: "Untitled"
+author: "Emile Latour"
+date: "February 5, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+#### Global chunk options -----------------------------
+
+knitr::opts_chunk$set(
+  eval       = TRUE,    # whether to run code in code chunk
+  include    = TRUE,    # whether to include the chunk output
+  echo       = TRUE,    # Whether to show code chunk in final output
+  error      = TRUE,    # whether to display error messages
+  message    = FALSE,   # whether to preserve messages
+  warning    = FALSE,   # whether to preserve warnings
+  comment    = NA,      # a character string to append at start
+                        # of each line of results in final document
+  tidy       = FALSE   # whether to tidy code chunks for display
+  
+)
+
+
+#### Other options --------------------------------
+
+## Scientific notation ---------------
+
+# Find out what it is set to
+# getOption("scipen")
+
+# Turn off scientific notation
+options(scipen = 999)
+
+
+## define format ----------------
+# If you don't define format here, you'll need put `format = "html"` in 
+# every kable function.
+
+options(knitr.table.format = "html")  # use this option when knitting html
+# options(knitr.table.format = "latex")  # use this option when knitting pdf
+
+
+#### Set random seed ----------------------------
+
+seed_for_imp <- 2017
+
+
+#### Packages --------------------------------------
+# This is where we load in all the packages we plan to use
+
+## Define the repository for packages ----------------
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+
+# universally useful packages
+if (!require("pacman")) install.packages("pacman")
+if (!require("devtools")) install.packages("devtools")
+
+# github packages
+if (!require("janitor")) devtools::install_github("sfirke/janitor")
+if (packageVersion("janitor") < "0.4.0.9000") {
+  devtools::install_github("sfirke/janitor")
+}
+  
+# Load the list of packages
+pacman::p_load(
+  Hmisc,         # contains many functions useful for data analysis
+  psych,         # a general purpose toolbox
+  tidyverse,     # packages ggplot2, tibble, tidyr, readr, purrr, and dplyr 
+  forcats,       # functions for factors, forcats is an anagram for factors
+  broom,         # functions tidy(), glance(), augment()
+  magrittr,      # includes the %<>% assignment-pipe (%>% is loaded from dplyr)
+  rlang,         # For use in tidyevaluation
+  readxl,        # read in excel files
+  writexl,       # write excel files, zero dependency
+  xlsx,          # read, write, format Excel files
+  janitor,       # for working with dirty data
+  lubridate,     # for working with dates and times
+  stringr,       # handy string operations
+  tableone,      # Create Table 1 to Describe Baseline Characteristics
+  DT,            # render R objects as HTML tables
+  knitr,         # A General-Purpose Package for Dynamic Report Generation in R
+  kableExtra,    # Enahced table functions
+  ggthemes,      # Extra Themes, Scales and Geoms for 'ggplot2'
+  scales,        # Scale Functions for Visualization
+  visdat,        # Preliminary data visualisation
+  naniar,        # structures, summaries, and visualisations for missing data
+  here,          # Constructs paths to your project's files
+  mice           # Multivariate Imputation by Chained Equations
+
+  )
+
+
+#### Other packages -----------------------------
+
+#### Some resources ---------------------------
+
+#### Themes and colors -------------------------------
+
+#### Confirm directory --------------------------------
+
+here::here()
+
+```
+
+
+# Read in the data
+
+```{r read-in-the-data, results=FALSE}
+
+# read in the data
+df_raw <- 
+  readr::read_rds("../data/cardiac_valdata_for_impute.rds")
+
+# Minimal data step
+cardiac <- df_raw %>% 
+  dplyr::select(-FPL_PERCENTAGE) %>% 
+  mutate_at(.vars = vars(ELIG_cervical:EHR_smoking), 
+            .funs = funs(factor(.)))
+
+# Check out the data
+# dplyr::glimpse(cardiac)
+cardiac
+```
+
+
+# EDA / explore missingness
+
+
+TODO -- add this stuff later
+
+# Imputation
+
+## Some set up
+
+Here I want to defined variables for the number of imputations and the number of iterations. 
+
+```{r}
+imp_num <- 30  # number of imputations, dflt = 5
+# iter_num <- 20  # number of interations, dflt = 5
+iter_num <- 1  # number of interations, dflt = 5
+
+```
+
+
+## Quick predictor matrix
+
+According to van Burren the `predictormatrix` function is useful for dealing with data sets with large number of variables. 
+
+Only show the matrix below for those records with > 1 rows or columns
+
+```{r}
+predGuess <- cardiac %>% 
+  mice::quickpred(.)
+
+predGuess[rowSums(predGuess) > 0, colSums(predGuess) > 0] %>% 
+  kable()
+
+```
+
+
+# Variables to include
+
+A list of variables was ordered and curated by John Heintzman.
+
+```{r}
+
+varNames <- 
+  c("StudyID", "sex", "age_start", # "FPL_PERCENTAGE", 
+    "PrimaryDept", "ethnic.cat", "lang.cat", "race.cat", 
+    "fpl.cat", "age.cat", "ELIG_cervical", "ELIG_breast", 
+    "ELIG_colon", "ELIG_colonoscopy", "ELIG_flexsig", 
+    "ELIG_FOBT", "ELIG_BMI", "ELIG_Flu", "ELIG_chlam", 
+    "ELIG_smoking", "ELIG_cholest", "DMAP_cervical", 
+    "DMAP_breast", "DMAP_colon", "DMAP_colonoscopy", 
+    "DMAP_flexsig", "DMAP_FOBT", "DMAP_BMI", "DMAP_Flu", 
+    "DMAP_chlam", "DMAP_smoking", "DMAP_cholest", "EHR_cervical", 
+    "EHR_breast", "EHR_colon", "EHR_colonoscopy", "EHR_FlexSig", 
+    "EHR_FOBT", "EHR_BMI", "EHR_Weight", "EHR_Flu", "EHR_chlam", 
+    "EHR_smoking", "EHR_cholest")
+
+# JH_list <- 
+#   c("fpl.cat", "race.cat", "ethnic.cat", "lang.cat", "age_start", "sex", 
+#     "PrimaryDept", "EHR_cervical", "EHR_breast", "EHR_colon", 
+#     "EHR_colonoscopy", "DMAP_breast", "DMAP_colonoscopy", "EHR_cholest", 
+#     "DMAP_cholest", "CholestScreen_elig", "EHR_FlexSig", "EHR_FOBT", 
+#     "EHR_BMI", "EHR_Weight", "EHR_Flu", "EHR_chlam", "EHR_smoke", 
+#     "DMAP_cervical", "DMAP_colon", "DMAP_flexsig", "DMAP_FOBT", "DMAP_BMI", 
+#     "DMAP_Flu", "DMAP_chlam", "CervicalScreen_elig", "BreastScreen_elig", 
+#     "ColonScreen_elig", "BMIScreen_elig", "FluVac_elig", "ChlamydScreen_elig", 
+#     "TobaccoScreen_elig"
+#     )
+
+JH_list <- 
+  c("fpl.cat", "race.cat", "ethnic.cat", "lang.cat", "age_start", "sex", 
+    "PrimaryDept", "EHR_cervical", "EHR_breast", "EHR_colon", 
+    "EHR_colonoscopy", "DMAP_breast", "DMAP_colonoscopy", "EHR_cholest", 
+    "DMAP_cholest", "ELIG_cholest", "EHR_FlexSig", "EHR_FOBT", 
+    "EHR_BMI", "EHR_Weight", "EHR_Flu", "EHR_chlam", "EHR_smoking", 
+    "DMAP_cervical", "DMAP_colon", "DMAP_flexsig", "DMAP_FOBT", "DMAP_BMI", 
+    "DMAP_Flu", "DMAP_chlam", "ELIG_cervical", "ELIG_breast", 
+    "ELIG_colon", "ELIG_BMI", "ELIG_Flu", "ELIG_chlam", 
+    "ELIG_smoking"
+    )
+# Remove
+# "StudyID", "FPL_PERCENTAGE", "age.cat", "DMAP_smoking"
+
+vars_to_include <- varNames[(varNames %in% JH_list)]
+
+# varNames[!(varNames %in% JH_list)]
+
+pred <- predGuess
+pred[, ] <- 0
+pred[, vars_to_include] <- 1
+diag(pred) <- 0
+# head(pred)
+dim(pred)
+head(pred)
+```
+
+# Make the visiting scheme
+
+Pretty sure that this doesn't do anything.
+
+```{r}
+miOrder <- vars_to_include %>% 
+  match(., JH_list) %>% 
+  as.numeric(.)
+
+comboList <- data.frame(vars_to_include, JH_list) %>% 
+  cbind(., miOrder)
+  
+comboList %>% 
+  kable(.)
+
+```
+
+
+
+## Visting sequence
+
+This tells `mice` the order to impute the missing variables. I looked at high to low and low to high. Didn't seem to make a difference. van Buuren says that it would only really matter with longitudinal studies.
+
+`init$visitSequence` give the varaibles to be imputed and their column positions.
+
+```{r}
+init <- mice::mice(cardiac, maxit = 0)
+meth <- init$method
+predM <- init$predictorMatrix
+# print(ini)
+ 
+
+init$visitSequence
+# ethnic.cat   race.cat    fpl.cat 
+#          5          7          8 
+```
+
+
+### Define the order for visiting
+
+FPL -> Race -> Ethnicity
+
+```{r}
+visit_order <- c(init$visitSequence[["fpl.cat"]], 
+                 init$visitSequence[["race.cat"]], 
+                 init$visitSequence[["ethnic.cat"]])
+```
+
+## Specify the methods for imputing the missing values
+
+__FPL__ -- logistic regression (`logreg`), for factor with 2 levels.
+
+__Race__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
+
+__Ethnicity__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
+
+```{r}
+meth[c("ethnic.cat")] <- "polyreg"
+meth[c("race.cat")] <- "polyreg"
+meth[c("fpl.cat")] <- "logreg"
+meth
+```
+
+## Predictor matrices
+
+
+
+### Full list 
+
+```{r}
+pred <- predM
+pred[, ] <- 0
+pred[, vars_to_include] <- 1
+diag(pred) <- 0
+
+head(pred[, 1:10], n = 10)
+
+```
+
+# Imputations (FPL, Race, and Ethnicity)
+
+## Full list (41 vars)
+
+```{r, cache=FALSE}
+system.time(
+imp_full <- 
+  mice::mice(data = cardiac, 
+             m = imp_num,  # number of imputations, dflt = 5
+             method = meth,  # specify the method
+             predictorMatrix = pred, 
+             visitSequence = visit_order, 
+             seed = seed_for_imp, 
+             maxit = iter_num,  # number of interations, dflt = 5
+             print = FALSE
+             )
+)
+ #   user  system elapsed 
+ # 753.92   10.39  765.00 
+
+# with 20 imputations
+#    user  system elapsed 
+# 3782.48   25.14 3821.28
+```
+
+### Plot of convergence
+
+```{r}
+plot(imp_full, c("ethnic.cat", "race.cat", "fpl.cat"))
+```
+
+
+# Look at the imputed data sets
+
+```{r}
+
+mylist <- list() #create an empty list
+
+for (i in 1:imp_full$m) {
+  
+  mylist[[i]] <- mice::complete(imp_full, i)
+  
+}
+
+mylist[[1]]
+
+
+output <- tibble::enframe(mylist, name = "imp", value = "data") %>% 
+  tidyr::unnest()
+
+# This would do the same thing, maybe faster, but the above has the added 
+# benefit of easily adding the number of the imputation so that I can track 
+# things. Either way, I chose the one above as my preference.
+# df <- do.call(rbind, mylist)
+# df
+
+# Should be 393,030 rows = 30 sets X 13101 rows per set
+dplyr::glimpse(output)
+head(output)
+tail(output)
+
+```
+
+
+```{r}
+make_cardiac_long <- function(df) { 
+  
+  # Reshape ELIG, DMAP, and EHR
+  df_long <- df %>% 
+    tidyr::gather(data = ., 
+                  key = "vars", 
+                  value = "value", 
+                  ELIG_cervical:EHR_cholest) %>% 
+    tidyr::separate(col = vars, 
+                    into = c("EHR_DMAP_ELIG", "proc"), 
+                    sep = "_", 
+                    remove = TRUE) %>% 
+    dplyr::mutate(proc = case_when(
+      proc == "BMI" ~ "bmi", 
+      proc == "FlexSig" ~ "flexsig", 
+      proc == "FOBT" ~ "fobt", 
+      proc == "Weight" ~ "weight", 
+      TRUE ~ proc
+    )) %>% 
+    tidyr::spread(data = ., 
+                  key = EHR_DMAP_ELIG, 
+                  value = value)
+  
+  # Gather the categories
+  df_long %<>% 
+    tidyr::gather(data = ., 
+                  key = "cat", 
+                  value = "level", 
+                  sex, ethnic.cat:age.cat) %>% 
+    mutate(cat = case_when(
+      cat == "age.cat" ~ "age", 
+      cat == "ethnic.cat" ~ "ethnicity", 
+      cat == "fpl.cat" ~ "fpl", 
+      cat == "lang.cat" ~ "language", 
+      cat == "race.cat" ~ "race", 
+      TRUE ~ cat
+    ))
+  
+  
+  # Pick one category and dummy the category and the levels
+  # And bind the all back to the long data
+  df_long %<>% 
+    dplyr::filter(cat == "sex") %>% 
+    mutate(cat = "all", 
+           level = "all") %>% 
+    dplyr::bind_rows(., df_long)
+  
+  df_long %>%
+    dplyr::select(imp, 
+                  StudyID,
+                  age_start,
+                  PrimaryDept,
+                  proc, 
+                  cat,
+                  level, 
+                  ELIG, 
+                  EHR, 
+                  DMAP
+                  )
+  
+  }
+```
+
+
+```{r}
+
+
+df <- make_cardiac_long(df = output)
+
+df
+
+df %>% 
+  group_by(cat) %>% 
+  summarise(
+    n = n(), 
+    ELIG = sum(as.numeric(ELIG), na.rm = TRUE), 
+    EHR = sum(as.numeric(EHR), na.rm = TRUE), 
+    DMAP = sum(as.numeric(DMAP), na.rm = TRUE), 
+    id = sum(as.numeric(StudyID), na.rm = TRUE), 
+    age = sum(age_start, na.rm = TRUE)
+  )
+
+
+
+```
+
+
+```{r}
+df_nested <- df %>% 
+  group_by(proc, cat, level, imp) %>% 
+  nest()
+
+
+
+df_nested
+df_nested$data[[1]]
+head(df_nested$data[[1]])
+tail(df_nested$data[[1]])
+
+
+
+```
+
+
+
+```{r, warning=FALSE}
+
+foo <- df_nested %>% 
+  mutate(Q = purrr::map(.x = data, .f = calc_stats_p), 
+         U = purrr::map(.x = data, .f = calc_stats_se))
+
+foo
+foo$data[[1]]
+
+bar <- foo %>% 
+  tidyr::unnest(Q, U) %>% 
+  dplyr::rename(Q = Q, 
+                U = Q1) %>% 
+  dplyr::select(-stat1) %>% 
+  dplyr::filter(! (stat %in% c("EHR.t", "DMAP.t", "Combo.t"))) %>% 
+  mutate_at(.vars = vars(Q, U), .funs = funs(as.numeric))
+
+
+bar <- bar %>% 
+  group_by(proc, cat, level, stat) %>% 
+  nest()
+
+bar$data[[1]]
+
+bar <- bar %>% 
+  mutate(pooled = purrr::map(.x = data, .f = mi_pool))
+
+baz <- bar %>% 
+  unnest(pooled)
+
+
+```
+
+```{r}
+
+baz %>% 
+  dplyr::select(proc:stat, qbar) %>% 
+  tidyr::spread(., key = stat, value = qbar)
+
+```
+
+```{r}
+
+baz %>% 
+  group_by(proc, cat, level) %>% 
+  count()
+
+
+12 * 19
+
+
+length(unique(baz$level))
+length(unique(baz$cat))
+length(unique(baz$proc))
+
+```
+
