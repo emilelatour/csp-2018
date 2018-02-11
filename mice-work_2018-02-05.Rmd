@@ -351,81 +351,81 @@ make_screening <- function(df,
 ## Make the screenings values ----------------
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_cervical, 
-                     dmp_scr = dmap_cervical, 
-                     ehr_scr = ehr_cervical, 
-                     dmp_prob = 0.30, 
-                     ehr_prob = 0.30)
+                          elig_var = elig_cervical, 
+                          dmp_scr = dmap_cervical, 
+                          ehr_scr = ehr_cervical, 
+                          dmp_prob = 0.30, 
+                          ehr_prob = 0.30)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_breast, 
-                     dmp_scr = dmap_breast, 
-                     ehr_scr = ehr_breast, 
-                     dmp_prob = 0.40, 
-                     ehr_prob = 0.40)
+                          elig_var = elig_breast, 
+                          dmp_scr = dmap_breast, 
+                          ehr_scr = ehr_breast, 
+                          dmp_prob = 0.40, 
+                          ehr_prob = 0.40)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_colon, 
-                     dmp_scr = dmap_colon, 
-                     ehr_scr = ehr_colon, 
-                     dmp_prob = 0.30, 
-                     ehr_prob = 0.30)
+                          elig_var = elig_colon, 
+                          dmp_scr = dmap_colon, 
+                          ehr_scr = ehr_colon, 
+                          dmp_prob = 0.30, 
+                          ehr_prob = 0.30)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_colonoscopy, 
-                     dmp_scr = dmap_colonoscopy, 
-                     ehr_scr = ehr_colonoscopy, 
-                     dmp_prob = 0.10, 
-                     ehr_prob = 0.10)
+                          elig_var = elig_colonoscopy, 
+                          dmp_scr = dmap_colonoscopy, 
+                          ehr_scr = ehr_colonoscopy, 
+                          dmp_prob = 0.10, 
+                          ehr_prob = 0.10)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_flexsig, 
-                     dmp_scr = dmap_flexsig, 
-                     ehr_scr = ehr_flexsig, 
-                     dmp_prob = 0.05, 
-                     ehr_prob = 0.05)
+                          elig_var = elig_flexsig, 
+                          dmp_scr = dmap_flexsig, 
+                          ehr_scr = ehr_flexsig, 
+                          dmp_prob = 0.05, 
+                          ehr_prob = 0.05)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_fobt, 
-                     dmp_scr = dmap_fobt, 
-                     ehr_scr = ehr_fobt, 
-                     dmp_prob = 0.15, 
-                     ehr_prob = 0.30)
+                          elig_var = elig_fobt, 
+                          dmp_scr = dmap_fobt, 
+                          ehr_scr = ehr_fobt, 
+                          dmp_prob = 0.15, 
+                          ehr_prob = 0.30)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_bmi, 
-                     dmp_scr = dmap_bmi, 
-                     ehr_scr = ehr_bmi, 
-                     dmp_prob = 0.05, 
-                     ehr_prob = 0.85)
+                          elig_var = elig_bmi, 
+                          dmp_scr = dmap_bmi, 
+                          ehr_scr = ehr_bmi, 
+                          dmp_prob = 0.05, 
+                          ehr_prob = 0.85)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_flu, 
-                     dmp_scr = dmap_flu, 
-                     ehr_scr = ehr_flu, 
-                     dmp_prob = 0.35, 
-                     ehr_prob = 0.40)
+                          elig_var = elig_flu, 
+                          dmp_scr = dmap_flu, 
+                          ehr_scr = ehr_flu, 
+                          dmp_prob = 0.35, 
+                          ehr_prob = 0.40)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_chlam, 
-                     dmp_scr = dmap_chlam, 
-                     ehr_scr = ehr_chlam, 
-                     dmp_prob = 0.50, 
-                     ehr_prob = 0.40)
+                          elig_var = elig_chlam, 
+                          dmp_scr = dmap_chlam, 
+                          ehr_scr = ehr_chlam, 
+                          dmp_prob = 0.50, 
+                          ehr_prob = 0.40)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_smoking, 
-                     dmp_scr = dmap_smoking, 
-                     ehr_scr = ehr_smoking, 
-                     dmp_prob = 0.05, 
-                     ehr_prob = 0.95)
+                          elig_var = elig_smoking, 
+                          dmp_scr = dmap_smoking, 
+                          ehr_scr = ehr_smoking, 
+                          dmp_prob = 0.05, 
+                          ehr_prob = 0.95)
 
 valdata <- make_screening(df = valdata, 
-                     elig_var = elig_cholest, 
-                     dmp_scr = dmap_cholest, 
-                     ehr_scr = ehr_cholest, 
-                     dmp_prob = 0.40, 
-                     ehr_prob = 0.40)
+                          elig_var = elig_cholest, 
+                          dmp_scr = dmap_cholest, 
+                          ehr_scr = ehr_cholest, 
+                          dmp_prob = 0.40, 
+                          ehr_prob = 0.40)
 
 
 #### Remove what's no longer needed --------------------------------
@@ -433,6 +433,9 @@ valdata <- make_screening(df = valdata,
 rm(make_factor, make_factor2, make_screening, size, var_names)
 
 ```
+
+TODO -- Change the name of the data set everywhere else.
+TODO -- test the user functions
 
 
 # EDA / explore missingness
@@ -461,7 +464,7 @@ According to van Burren the `predictormatrix` function is useful for dealing wit
 Only show the matrix below for those records with > 1 rows or columns
 
 ```{r}
-predGuess <- cardiac %>% 
+predGuess <- valdata %>% 
   mice::quickpred(.)
 
 predGuess[rowSums(predGuess) > 0, colSums(predGuess) > 0] %>% 
