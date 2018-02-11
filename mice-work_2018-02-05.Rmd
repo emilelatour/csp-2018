@@ -44,7 +44,8 @@ options(knitr.table.format = "html")  # use this option when knitting html
 
 #### Set random seed ----------------------------
 
-seed_for_imp <- 2017
+seed_for_imp <- 8675309
+set.seed(seed_for_imp)
 
 
 #### Packages --------------------------------------
@@ -172,8 +173,8 @@ size <- 14000
 
 ## Create tibble with NA's ----------------
 
-df  <- tibble::as.tibble(matrix(NA, nrow = size, ncol = length(var_names)))
-names(df) <- var_names
+valdata <- tibble::as.tibble(matrix(NA, nrow = size, ncol = length(var_names)))
+names(valdata) <- var_names
 
 
 #### Make the demographic data --------------------------------
@@ -205,7 +206,7 @@ a <- floor(size / 3)
 b <- a
 c <- size - a - b
 
-df %<>% 
+valdata %<>% 
   mutate(
     study_id = seq(1:size), 
     sex = make_factor(levels = c("F", "M"), 
@@ -259,7 +260,7 @@ make_factor2 <- function(var) {
   factor(var, levels = c("1", "0"))
 }
 
-df %<>% 
+valdata %<>% 
   mutate(
     elig_cervical = 
       ifelse(sex == "F" & age_start >= 19 & age_start <= 64, 1, 0), 
@@ -349,77 +350,77 @@ make_screening <- function(df,
 
 ## Make the screenings values ----------------
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_cervical, 
                      dmp_scr = dmap_cervical, 
                      ehr_scr = ehr_cervical, 
                      dmp_prob = 0.30, 
                      ehr_prob = 0.30)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_breast, 
                      dmp_scr = dmap_breast, 
                      ehr_scr = ehr_breast, 
                      dmp_prob = 0.40, 
                      ehr_prob = 0.40)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_colon, 
                      dmp_scr = dmap_colon, 
                      ehr_scr = ehr_colon, 
                      dmp_prob = 0.30, 
                      ehr_prob = 0.30)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_colonoscopy, 
                      dmp_scr = dmap_colonoscopy, 
                      ehr_scr = ehr_colonoscopy, 
                      dmp_prob = 0.10, 
                      ehr_prob = 0.10)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_flexsig, 
                      dmp_scr = dmap_flexsig, 
                      ehr_scr = ehr_flexsig, 
                      dmp_prob = 0.05, 
                      ehr_prob = 0.05)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_fobt, 
                      dmp_scr = dmap_fobt, 
                      ehr_scr = ehr_fobt, 
                      dmp_prob = 0.15, 
                      ehr_prob = 0.30)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_bmi, 
                      dmp_scr = dmap_bmi, 
                      ehr_scr = ehr_bmi, 
                      dmp_prob = 0.05, 
                      ehr_prob = 0.85)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_flu, 
                      dmp_scr = dmap_flu, 
                      ehr_scr = ehr_flu, 
                      dmp_prob = 0.35, 
                      ehr_prob = 0.40)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_chlam, 
                      dmp_scr = dmap_chlam, 
                      ehr_scr = ehr_chlam, 
                      dmp_prob = 0.50, 
                      ehr_prob = 0.40)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_smoking, 
                      dmp_scr = dmap_smoking, 
                      ehr_scr = ehr_smoking, 
                      dmp_prob = 0.05, 
                      ehr_prob = 0.95)
 
-df <- make_screening(df = df, 
+valdata <- make_screening(df = valdata, 
                      elig_var = elig_cholest, 
                      dmp_scr = dmap_cholest, 
                      ehr_scr = ehr_cholest, 
