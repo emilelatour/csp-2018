@@ -492,7 +492,7 @@ tab1 %>%
 
 ## Visualizing missingness in the data set
 
-The table one above shows that there are missing data in the variables `race-cat`, `ethnic_cat`, and `fpl_cat`. When beginning to think about how to handle the missing data in your project, visualization is a great place to begin. The [`naniar`](https://cran.r-project.org/web/packages/naniar/index.html) and the [`visdat`](https://cran.r-project.org/web/packages/visdat/index.html) packages provide helpful plots.
+The table one above shows that there are missing data in the variables `race_cat`, `ethnic_cat`, and `fpl_cat`. When beginning to think about how to handle the missing data in your project, visualization is a great place to begin. The [`naniar`](https://cran.r-project.org/web/packages/naniar/index.html) and the [`visdat`](https://cran.r-project.org/web/packages/visdat/index.html) packages provide helpful plots.
 
 ### The `vis_miss()` plot
 
@@ -526,7 +526,7 @@ valdata %>%
 
 ### The `VIM`package
 
-The [`VIM`](https://cran.r-project.org/web/packages/VIM/VIM.pdf) also has many helpful tools for visualizing missing values. I really like their combination bar plot and aggregation plot. 
+The [`VIM`](https://cran.r-project.org/web/packages/VIM/VIM.pdf) package also has many helpful tools for visualizing missing values. I really like their combination bar plot and aggregation plot. 
 
 Here I have filtered the data to just those with missing values; I think that this helps the plot to be more clear. The barplot on the left shows the proportion of missing values in each variable. The aggregation plot on the right shows the combinations of missing (dark gray) and observed (light gray) values that exist in the data.
 
@@ -561,12 +561,17 @@ mssng_pattern %>%
   kable(.)
 ```
 
-9706 complete records.
-298 missing race only.
-2518 missing FPL only.
-0 missing ethnicity only.
-etc.
-4122 [9706 * 0 + 289 * 1 + 2518 * 1 + 392 * 2 + 57 * 2 + 139 * 3] the total number of missing values
+See Stef Van Buuren's vignette for more in depth interpretation of the tabe above. There's a lot of good info there. How I interpret it is to pay attention to the 1's and 0's in the main body of the table. They correspond to what is observed (1) and missing (0) for the variables listed in the top row.
+
+So the first row of all 1's means that all listed variables are observed; the count to the left shows the number of rows in the data set that fit this description. The last row of all 0's means that all variables are missing; similar that the count on the left shows the number of rows in the data set that are missing for all the variables shown. Then all the 1's and 0's in between represent some combination of missingness among the variables.
+
+The `naniar` package has summary that is a little simpler and gives some of the same information. But not as much detail as the `md.pattern()` in the `mice` package.
+
+```{r}
+valdata %>% 
+  naniar::miss_case_table(.) %>% 
+  kable(.)
+```
 
 
 ### Number of observations per pattern of missing pairs
@@ -581,10 +586,10 @@ mssng_pairs
 
 Four missingness patterns:
 
-rr both are observed,
-rm first variable is observed, the second is missing,
-mr first variable is missing, the second is observed, and
-mm both variable are missing.
++ `rr` both are observed,
++ `rm` first variable is observed, the second is missing,
++ `mr` first variable is missing, the second is observed, and
++ `mm` both variable are missing.
 
 ### Proportion of usable cases
 
@@ -602,7 +607,35 @@ with(prop_usable_cases,
 
 Target on the vertical axis (i.e. left), predictor on the horizontal (i.e. top).
 
-Of the 877 records with missing race, only 39% (346) have observed information on ethnicity.
+Interpret: Of the records with values for `ethnic_cat`, xx% have observed information on `race_cat` and xx% have observed information on `fplp_cat`. Etc.
+
+This gives a sense of what variables may be good to include/exlcude in the imputation model. Higher % indicates more informaton and likely good predictor; lower % indicates that the variables are missing for the same observations and may not be good predictor.
+
+### Number of incomplete cases
+
+
+
+```{r}
+
+complete <- complete.cases(valdata)
+sum(complete) / length(complete)
+sum(!complete) / length(complete)
+
+naniar::n_complete(valdata)
+naniar::pct_complete(valdata)
+naniar::miss_summary(valdata)
+naniar::miss_case_pct(valdata)
+naniar::miss_case_prop(valdata)  # ********
+naniar::miss_case_table(valdata)
+
+valdata %>% 
+  dplyr::filter_if(is.na)
+
+
+!complete.cases(valdata) %>% 
+  janitor::tabyl(.)
+```
+
 
 TODO -- add this stuff later
 
