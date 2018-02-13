@@ -626,18 +626,87 @@ Below I show some of the set up that I went through to perform the multiple impu
 
 Also, since my work was done, [online resources](https://cran.r-project.org/web/packages/mice/vignettes/resources.html) have been added.
 
+For more information about MICE: Multivariate Imputation by Chained Equations, sometimes called Fully Conditional Specification, I highly recommend any of the materials (code or books) or published papers by Stef van Buuren. Much can be found through his website, [www.multiple-imputation.com](http://www.stefvanbuuren.nl/mi/).
 
 ## Some set up
 
-Here I want to defined variables for the number of imputations and the number of iterations. 
+Here I am just going to define the number of imputations and the number of iterations to objects for use in later code. This is just a convenience step so that I only have to update these values in one place if I want to change them later.
+
+The default number of impuations in the `mice` software is 5. Based on the exploration of the missingness above, we saw that they number of imputations suggested is much higher. Here in this example, I am going to keep it set at the default 5, just to limit the compuation time if someone want to run this code on their own.
+
+In practice, my suggestion would be to "tune" the imputation using a lower number like the default setting. Then once the impuation model is set, perform you final or near final impuations using the higher number as suggested by recent literature.
+
+As far as iterations go, they tend to converge rather quickly with the `mice` algorithm. My advice is to run them out long enough to see whether there is convergence or not, while not getting super bogged down with computation time.
+
+Here I am going to continue to use the software default of 5 for our example. In my actual work, I used 20. In your practice I would suggest to try to use 10 to 20.
 
 ```{r}
-imp_num <- 30  # number of imputations, dflt = 5
-# iter_num <- 20  # number of interations, dflt = 5
-iter_num <- 1  # number of interations, dflt = 5
+imp_num <- 5  # number of imputations, dflt = 5
+iter_num <- 5  # number of interations, dflt = 5
 
 ```
 
+We can also tel the `mice` software to run an "initial" empty impuation. The only effect of this is to give us some objects in R to work with as we go through the steps. See below where I run the initial impuation. Note that the maximum number of iterations (`maxit`) is set to zero.
+
+```{r}
+init <- mice::mice(valdata, maxit = 0)
+meth <- init$method
+predM <- init$predictorMatrix
+# print(ini)
+
+```
+
+The `init` object contains lots of information that we will work with as we go forward. Of interest for now though is the method selected for the variables. This is the form of the imputation model for the variables to be imputed.
+
+```{r}
+meth
+```
+
+We see that the software made no choice for the variables without missing data. For those with missing data, based on the type of variable, it makes some default choices. We can override these later.
+
+We also get the default matrix of predictors that the sofware chose. This is an object of 1's and 0's. For those variables with no missing and that we won't be imputing, the values are zero. Here is a glimpse of just those that we intend to impute.
+
+```{r}
+predM[rowSums(predM) > 0, ]
+```
+
+
+
+## Specify the imputation model
+
+Here I will follow the 7 steps that van Buuren suggests in order to set up the algorithm. See his writings for more details than I will go into here.
+
+### Step 1 - Decide if the missing at random (MAR) assumption is reasonable
+
+In this example, we randomly assigned missing values. So here, it kind of has to be reasonable. In practice thoug, this can be challenging to know for sure which is why the exploration of the data and the missingness is such an important step to take as I showed above.
+
+Assuming MAR is typically a reasonable place to start. There is literature on sensitivity analysis with the imputations to examine if this assumption is met. And there are techniques to model the missing mechanism with the imputation if there is violation. This work is outside the scope of what I hope to share here.
+
+### Step 2 - Decide on the form of the imputation model
+
+## Specify the methods for imputing the missing values
+
+__FPL__ -- logistic regression (`logreg`), for factor with 2 levels.
+
+__Race__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
+
+__Ethnicity__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
+
+```{r}
+meth[c("ethnic.cat")] <- "polyreg"
+meth[c("race.cat")] <- "polyreg"
+meth[c("fpl.cat")] <- "logreg"
+meth
+```
+
+
+
+
+## Variables to include
+
+What variables to include in the multiple imputation model? 
+
+The advice is to include at least the same variables that are in your scientific model of interest. 
 
 ## Quick predictor matrix
 
@@ -762,20 +831,6 @@ visit_order <- c(init$visitSequence[["fpl.cat"]],
                  init$visitSequence[["ethnic.cat"]])
 ```
 
-## Specify the methods for imputing the missing values
-
-__FPL__ -- logistic regression (`logreg`), for factor with 2 levels.
-
-__Race__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
-
-__Ethnicity__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
-
-```{r}
-meth[c("ethnic.cat")] <- "polyreg"
-meth[c("race.cat")] <- "polyreg"
-meth[c("fpl.cat")] <- "logreg"
-meth
-```
 
 ## Predictor matrices
 
