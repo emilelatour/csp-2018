@@ -613,11 +613,19 @@ n_missing
 
 ```
 
-So we know that in the data set `r scales::percent(n_missing)` of observations have missing values. 
+So we know that in the data set `r scales::percent(n_missing)` of observations have missing values. I round this up to `r max(pretty(100 * n_missing))` to select the number of imputations to perform.
 
-TODO -- add this stuff later
 
 # Imputation
+
+Below I show some of the set up that I went through to perform the multiple imputations using the `mice` package in R. Some resources were abosolutely indespensible in my set up and learning: 
+
++ the [`mice` package documentation](https://cran.r-project.org/web/packages/mice/mice.pdf)
++ the [vignette](https://www.jstatsoft.org/article/view/v045i03/v45i03.pdf) from the Journal of Statistical Software (December 2011, Volume 45, Issue 3)
++ [Flexible Imputation of Missing Data](https://www.crcpress.com/Flexible-Imputation-of-Missing-Data/van-Buuren/p/book/9781439868249) by Stef van Buuren
+
+Also, since my work was done, [online resources](https://cran.r-project.org/web/packages/mice/vignettes/resources.html) have been added.
+
 
 ## Some set up
 
