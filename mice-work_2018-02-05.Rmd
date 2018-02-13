@@ -484,14 +484,15 @@ print_table_one <- . %>%
                             latex_options = c("repeat_header")) %>% 
   kableExtra::column_spec(1, width = "10em")
 
+#### Print table one --------------------------------
 
 tab1 %>% 
   print_table_one
 ```
 
-## Missingness in the data set
+## Visualizing missingness in the data set
 
-The table one above shows that there are missing data in the variables `race-cat` (7.3%), `ethnic_cat` (5.0%), and `fpl_cat` (19.7%). When beginning to think about how to handle the missing data in your project, visualization is a great place to begin. The [`naniar`](https://cran.r-project.org/web/packages/naniar/index.html) and the [`visdat`](https://cran.r-project.org/web/packages/visdat/index.html) packages provide helpful plots.
+The table one above shows that there are missing data in the variables `race-cat`, `ethnic_cat`, and `fpl_cat`. When beginning to think about how to handle the missing data in your project, visualization is a great place to begin. The [`naniar`](https://cran.r-project.org/web/packages/naniar/index.html) and the [`visdat`](https://cran.r-project.org/web/packages/visdat/index.html) packages provide helpful plots.
 
 ### The `vis_miss()` plot
 
@@ -523,6 +524,85 @@ valdata %>%
 
 ```
 
+### The `VIM`package
+
+The [`VIM`](https://cran.r-project.org/web/packages/VIM/VIM.pdf) also has many helpful tools for visualizing missing values. I really like their combination bar plot and aggregation plot. 
+
+Here I have filtered the data to just those with missing values; I think that this helps the plot to be more clear. The barplot on the left shows the proportion of missing values in each variable. The aggregation plot on the right shows the combinations of missing (dark gray) and observed (light gray) values that exist in the data.
+
+```{r}
+valdata %>% 
+  dplyr::select(race_cat, ethnic_cat, fpl_cat) %>% 
+  VIM::aggr(., 
+            col = c("gray", "gray29"), 
+            numbers = TRUE, 
+            sortVars = TRUE, 
+            labels = names(.), 
+            cex.axis = .7, 
+            gap = 3, 
+            ylab = c("Histogram of missing data","Pattern"))
+```
+
+
+## Numerical summaries
+
+```{r}
+mssng_pattern <- valdata %>% 
+  dplyr::select(race_cat, ethnic_cat, fpl_cat) %>% 
+  mice::md.pattern(.) %>% 
+  as.data.frame() %>% 
+  tibble::as_tibble(.) %>% 
+  tibble::rownames_to_column(., var = "count") %>% 
+  dplyr::rename(., 
+                # new = old
+                num_available = V4)
+
+mssng_pattern %>% 
+  kable(.)
+```
+
+9706 complete records.
+298 missing race only.
+2518 missing FPL only.
+0 missing ethnicity only.
+etc.
+4122 [9706 * 0 + 289 * 1 + 2518 * 1 + 392 * 2 + 57 * 2 + 139 * 3] the total number of missing values
+
+
+### Number of observations per pattern of missing pairs
+
+```{r}
+mssng_pairs <- valdata %>% 
+  dplyr::select(ethnic_cat, race_cat, fpl_cat) %>% 
+  mice::md.pairs(.)
+
+mssng_pairs
+```
+
+Four missingness patterns:
+
+rr both are observed,
+rm first variable is observed, the second is missing,
+mr first variable is missing, the second is observed, and
+mm both variable are missing.
+
+### Proportion of usable cases
+
+Measures how many cases with missing data on the target variable actually have observed values on the predictor. The proportion will be low if both target and predictor are missing on the same cases.
+
+```{r}
+
+prop_usable_cases <- valdata %>% 
+  dplyr::select(ethnic_cat, race_cat, fpl_cat) %>% 
+  mice::md.pairs(.)
+
+with(prop_usable_cases, 
+     round(mr / (mr + mm), digits = 3))
+```
+
+Target on the vertical axis (i.e. left), predictor on the horizontal (i.e. top).
+
+Of the 877 records with missing race, only 39% (346) have observed information on ethnicity.
 
 TODO -- add this stuff later
 
