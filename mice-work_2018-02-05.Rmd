@@ -25,14 +25,8 @@ knitr::opts_chunk$set(
 
 #### Other options --------------------------------
 
-## Scientific notation ---------------
-
-# Find out what it is set to
-# getOption("scipen")
-
-# Turn off scientific notation
+## Turn off scientific notation ----------------
 options(scipen = 999)
-
 
 ## define format ----------------
 # If you don't define format here, you'll need put `format = "html"` in 
@@ -41,9 +35,7 @@ options(scipen = 999)
 options(knitr.table.format = "html")  # use this option when knitting html
 # options(knitr.table.format = "latex")  # use this option when knitting pdf
 
-
-#### Set random seed ----------------------------
-
+## Set random seed ----------------
 seed_for_imp <- 8675309
 set.seed(seed_for_imp)
 
@@ -92,12 +84,9 @@ pacman::p_load(
 
   )
 
+#### Store time for later --------------------------------
 
-#### Other packages -----------------------------
-
-#### Some resources ---------------------------
-
-#### Themes and colors -------------------------------
+start_time <- Sys.time()
 
 #### Confirm directory --------------------------------
 
@@ -613,29 +602,18 @@ This gives a sense of what variables may be good to include/exlcude in the imput
 
 ### Number of incomplete cases
 
+More recent advise on how many imputations to perform suggests a rule of thumb that the number of imputations should be similar to the percentage of cases that are incomplete. So, not just as a part of the EDA, it is important to know the number of incomplete cases to inform the specification of the imputation model later.
 
+An incomplete case would be an obervation (or row) with at least one missing value. There are a number of ways to get at this information, but the `naniar` package makes it super easy.
 
 ```{r}
 
-complete <- complete.cases(valdata)
-sum(complete) / length(complete)
-sum(!complete) / length(complete)
+n_missing <- naniar::miss_case_prop(valdata)
+n_missing
 
-naniar::n_complete(valdata)
-naniar::pct_complete(valdata)
-naniar::miss_summary(valdata)
-naniar::miss_case_pct(valdata)
-naniar::miss_case_prop(valdata)  # ********
-naniar::miss_case_table(valdata)
-
-valdata %>% 
-  dplyr::filter_if(is.na)
-
-
-!complete.cases(valdata) %>% 
-  janitor::tabyl(.)
 ```
 
+So we know that in the data set `r scales::percent(n_missing)` of observations have missing values. 
 
 TODO -- add this stuff later
 
