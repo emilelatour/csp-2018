@@ -116,6 +116,8 @@ The proportions of screenings in the data were chosen to try to simulate some da
 
 Disclaimer: All the data in this example is simulated from the following code. Any similarities to the original data set or any other existing data is purely by chance alone.
 
+## Simulate the data
+
 ```{r make-fake-data, results=FALSE}
 
 #### Set the variable names --------------------------------
@@ -434,11 +436,92 @@ rm(make_factor, make_factor2, make_screening, size, var_names)
 
 ```
 
+## Do some checks and take a glimpse
+
+```{r}
+dplyr::glimpse(valdata)
+```
+
+
 TODO -- Change the name of the data set everywhere else.
 TODO -- test the user functions
 
 
 # EDA / explore missingness
+
+## Table One
+
+A quick table one to look at the demographics of the sample data.
+
+```{r}
+#### Create a table one --------------------------------
+# Table one summary stats using the tableone package
+
+tab1 <- tableone::CreateTableOne(
+  vars = c("sex", "race_cat", "ethnic_cat", "lang_cat", "fpl_cat", "age_cat"), 
+  data = valdata, 
+  factorVars = 
+    c("sex", "race_cat", "ethnic_cat", "lang_cat", "fpl_cat", "age_cat"), 
+  includeNA = TRUE
+)
+
+#### print_table_one --------------------------------
+# A helper function to print the table one object to my preference.
+
+print_table_one <- . %>% 
+  print(., 
+        showAllLevels = TRUE, 
+        printToggle = FALSE, 
+        noSpaces = TRUE
+        ) %>% 
+  as.data.frame(.) %>% 
+  tibble::rownames_to_column(., var = "rowname") %>% 
+  knitr::kable(format = "html", 
+               booktabs = TRUE, 
+               longtable = TRUE, 
+               col.names = c("", names(.)[-1])) %>% 
+  kableExtra::kable_styling(full_width = FALSE, 
+                            latex_options = c("repeat_header")) %>% 
+  kableExtra::column_spec(1, width = "10em")
+
+
+tab1 %>% 
+  print_table_one
+```
+
+## Missingness in the data set
+
+The table one above shows that there are missing data in the variables `race-cat` (7.3%), `ethnic_cat` (5.0%), and `fpl_cat` (19.7%). When beginning to think about how to handle the missing data in your project, visualization is a great place to begin. The [`naniar`](https://cran.r-project.org/web/packages/naniar/index.html) and the [`visdat`](https://cran.r-project.org/web/packages/visdat/index.html) packages provide helpful plots.
+
+### The `vis_miss()` plot
+
+In the figure below, we get an overview of the missing values in the data set. Missing are shown in black and observed values are shown in gray. We see that there are only 3 variables in the data set with missing values.
+
+```{r}
+naniar::vis_miss(valdata)
+```
+
+We can also get a numeric percent missing for the variables.
+
+```{r}
+miss_var_summary(valdata) %>% 
+  head(.)
+```
+
+### Setting `cluster = TRUE`
+
+It can also be useful to look at the missingness plot with the values clustered. This gives a sense of how many values are missing in one row. Many rows with multiple missing values can be problematic when trying to do impuation.
+
+I'm only going to show this plot for a few variables since we saw above that many were compeletely observed.
+
+```{r}
+
+valdata %>% 
+  dplyr::select(race_cat, ethnic_cat, fpl_cat, lang_cat, sex, age_cat) %>% 
+  naniar::vis_miss(., 
+                   cluster = TRUE)
+
+```
 
 
 TODO -- add this stuff later
