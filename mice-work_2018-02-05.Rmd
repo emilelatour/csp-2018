@@ -99,7 +99,7 @@ here::here()
 
 Due to the sensitive nature of electronic health record (EHR) data, in order to provide a data set for a reproducible example, I wrote code below to simulate a data set that can be used with the rest of the code in this example. The only similarities to the original data are the variable names and the data categories.
 
-Note that the eligibility requirements for screening services are based on sex, age, and medical history. I do not simulate medical history and so the eligility here is based only on sex and age.
+Note that the eligibility requirements for screening services are based on sex, age, and medical history. I do not simulate medical history and so the eligibility here is based only on sex and age.
 
 The proportions of screenings in the data were chosen to try to simulate some data that would make for interesting example with the rest of the code. The proportions of missingness are similar to the actual work that I presented in that I did a little bit of rounding before simulation.
 
@@ -500,9 +500,9 @@ miss_var_summary(valdata) %>%
 
 ### Setting `cluster = TRUE`
 
-It can also be useful to look at the missingness plot with the values clustered. This gives a sense of how many values are missing in one row. Many rows with multiple missing values can be problematic when trying to do impuation.
+It can also be useful to look at the missingness plot with the values clustered. This gives a sense of how many values are missing in one row. Many rows with multiple missing values can be problematic when trying to do imputation.
 
-I'm only going to show this plot for a few variables since we saw above that many were compeletely observed.
+I'm only going to show this plot for a few variables since we saw above that many were completely observed.
 
 ```{r}
 
@@ -517,7 +517,7 @@ valdata %>%
 
 The [`VIM`](https://cran.r-project.org/web/packages/VIM/VIM.pdf) package also has many helpful tools for visualizing missing values. I really like their combination bar plot and aggregation plot. 
 
-Here I have filtered the data to just those with missing values; I think that this helps the plot to be more clear. The barplot on the left shows the proportion of missing values in each variable. The aggregation plot on the right shows the combinations of missing (dark gray) and observed (light gray) values that exist in the data.
+Here I have filtered the data to just those with missing values; I think that this helps the plot to be more clear. The bar plot on the left shows the proportion of missing values in each variable. The aggregation plot on the right shows the combinations of missing (dark gray) and observed (light gray) values that exist in the data.
 
 ```{r}
 valdata %>% 
@@ -550,7 +550,7 @@ mssng_pattern %>%
   kable(.)
 ```
 
-See Stef Van Buuren's vignette for more in depth interpretation of the tabe above. There's a lot of good info there. How I interpret it is to pay attention to the 1's and 0's in the main body of the table. They correspond to what is observed (1) and missing (0) for the variables listed in the top row.
+See Stef Van Buuren's vignette for more in depth interpretation of the table above. There's a lot of good info there. How I interpret it is to pay attention to the 1's and 0's in the main body of the table. They correspond to what is observed (1) and missing (0) for the variables listed in the top row.
 
 So the first row of all 1's means that all listed variables are observed; the count to the left shows the number of rows in the data set that fit this description. The last row of all 0's means that all variables are missing; similar that the count on the left shows the number of rows in the data set that are missing for all the variables shown. Then all the 1's and 0's in between represent some combination of missingness among the variables.
 
@@ -598,19 +598,17 @@ Target on the vertical axis (i.e. left), predictor on the horizontal (i.e. top).
 
 Interpret: Of the records with values for `ethnic_cat`, xx% have observed information on `race_cat` and xx% have observed information on `fplp_cat`. Etc.
 
-This gives a sense of what variables may be good to include/exlcude in the imputation model. Higher % indicates more informaton and likely good predictor; lower % indicates that the variables are missing for the same observations and may not be good predictor.
+This gives a sense of what variables may be good to include/exclude in the imputation model. Higher % indicates more information and likely good predictor; lower % indicates that the variables are missing for the same observations and may not be good predictor.
 
 ### Number of incomplete cases
 
-More recent advise on how many imputations to perform suggests a rule of thumb that the number of imputations should be similar to the percentage of cases that are incomplete. So, not just as a part of the EDA, it is important to know the number of incomplete cases to inform the specification of the imputation model later.
+More recent advice on how many imputations to perform suggests a rule of thumb that the number of imputations should be similar to the percentage of cases that are incomplete. So, not just as a part of the EDA, it is important to know the number of incomplete cases to inform the specification of the imputation model later.
 
-An incomplete case would be an obervation (or row) with at least one missing value. There are a number of ways to get at this information, but the `naniar` package makes it super easy.
+An incomplete case would be an observation (or row) with at least one missing value. There are a number of ways to get at this information, but the `naniar` package makes it super easy.
 
 ```{r}
-
 n_missing <- naniar::miss_case_prop(valdata)
 n_missing
-
 ```
 
 So we know that in the data set `r scales::percent(n_missing)` of observations have missing values. I round this up to `r max(pretty(100 * n_missing))` to select the number of imputations to perform.
@@ -618,7 +616,7 @@ So we know that in the data set `r scales::percent(n_missing)` of observations h
 
 # Imputation
 
-Below I show some of the set up that I went through to perform the multiple imputations using the `mice` package in R. Some resources were abosolutely indespensible in my set up and learning: 
+Below I show some of the set up that I went through to perform the multiple imputations using the `mice` package in R. Some resources were absolutely indispensable in my set up and learning: 
 
 + the [`mice` package documentation](https://cran.r-project.org/web/packages/mice/mice.pdf)
 + the [vignette](https://www.jstatsoft.org/article/view/v045i03/v45i03.pdf) from the Journal of Statistical Software (December 2011, Volume 45, Issue 3)
@@ -632,9 +630,9 @@ For more information about MICE: Multivariate Imputation by Chained Equations, s
 
 Here I am just going to define the number of imputations and the number of iterations to objects for use in later code. This is just a convenience step so that I only have to update these values in one place if I want to change them later.
 
-The default number of impuations in the `mice` software is 5. Based on the exploration of the missingness above, we saw that they number of imputations suggested is much higher. Here in this example, I am going to keep it set at the default 5, just to limit the compuation time if someone want to run this code on their own.
+The default number of imputations in the `mice` software is 5. Based on the exploration of the missingness above, we saw that they number of imputations suggested is much higher. Here in this example, I am going to keep it set at the default 5, just to limit the computation time if someone want to run this code on their own.
 
-In practice, my suggestion would be to "tune" the imputation using a lower number like the default setting. Then once the impuation model is set, perform you final or near final impuations using the higher number as suggested by recent literature.
+In practice, my suggestion would be to "tune" the imputation using a lower number like the default setting. Then once the imputation model is set, perform you final or near final imputations using the higher number as suggested by recent literature.
 
 As far as iterations go, they tend to converge rather quickly with the `mice` algorithm. My advice is to run them out long enough to see whether there is convergence or not, while not getting super bogged down with computation time.
 
@@ -642,11 +640,11 @@ Here I am going to continue to use the software default of 5 for our example. In
 
 ```{r}
 imp_num <- 5  # number of imputations, dflt = 5
-iter_num <- 5  # number of interations, dflt = 5
+iter_num <- 5  # number of iterations, dflt = 5
 
 ```
 
-We can also tel the `mice` software to run an "initial" empty impuation. The only effect of this is to give us some objects in R to work with as we go through the steps. See below where I run the initial impuation. Note that the maximum number of iterations (`maxit`) is set to zero.
+We can also tel the `mice` software to run an "initial" empty imputation. The only effect of this is to give us some objects in R to work with as we go through the steps. See below where I run the initial imputation. Note that the maximum number of iterations (`maxit`) is set to zero.
 
 ```{r}
 init <- mice::mice(valdata, maxit = 0)
@@ -664,7 +662,7 @@ meth
 
 We see that the software made no choice for the variables without missing data. For those with missing data, based on the type of variable, it makes some default choices. We can override these later.
 
-We also get the default matrix of predictors that the sofware chose. This is an object of 1's and 0's. For those variables with no missing and that we won't be imputing, the values are zero. Here is a glimpse of just those that we intend to impute.
+We also get the default matrix of predictors that the software chose. This is an object of 1's and 0's. For those variables with no missing and that we won't be imputing, the values are zero. Here is a glimpse of just those that we intend to impute.
 
 ```{r}
 predM[rowSums(predM) > 0, ]
@@ -678,7 +676,7 @@ Here I will follow the 7 steps that van Buuren suggests in order to set up the a
 
 ### Step 1 - Decide if the missing at random (MAR) assumption is reasonable
 
-In this example, we randomly assigned missing values. So here, it kind of has to be reasonable. In practice thoug, this can be challenging to know for sure which is why the exploration of the data and the missingness is such an important step to take as I showed above.
+In this example, we randomly assigned missing values. So here, it kind of has to be reasonable. In practice though, this can be challenging to know for sure which is why the exploration of the data and the missingness is such an important step to take as I showed above.
 
 Assuming MAR is typically a reasonable place to start. There is literature on sensitivity analysis with the imputations to examine if this assumption is met. And there are techniques to model the missing mechanism with the imputation if there is violation. This work is outside the scope of what I hope to share here.
 
@@ -711,7 +709,7 @@ Including as many predictors as possible makes the MAR assumption more reasonabl
 
 My case is interesting. I am not doing modelling; I am calculating scalar statistics of agreement. Also, my data set isn't really too large (41 variables once you ignore study ID which isn't too important for imputation purposes). 
 
-To aid in these decisions the `mice` package has a function that produces a "quick predictor matrix" that is useful for dealing with data sets with large number of variables. The software chooses by calculating two correlations with the avaialable cases, taking the larger, and seeing if it meets a minimum theshhold. See `?quickpred` for better description.
+To aid in these decisions the `mice` package has a function that produces a "quick predictor matrix" that is useful for dealing with data sets with large number of variables. The software chooses by calculating two correlations with the available cases, taking the larger, and seeing if it meets a minimum threshold. Type `?quickpred` in the R console for better description.
 
 Below I run the `quickpred()` to see what the software chooses. Only show the matrix below for those records with > 1 rows or columns
 
@@ -723,9 +721,9 @@ predGuess[rowSums(predGuess) > 0, colSums(predGuess) > 0]
 
 ```
 
-Hmmm. As I am working through this example with the simulated data, the software did not choose any. In my actual work, it discovered about 2 to 3 important predictors for each variable.
+Hmm. As I am working through this example with the simulated data, the software did not choose any. In my actual work, it discovered about 2 to 3 important predictors for each variable.
 
-In my actual work, I went to the lead investigator for insight into the data set and suggestions on which variables would be informative. The code chunk below shows how I took the list that they provided and modified the `predM` oject.
+In my actual work, I went to the lead investigator for insight into the data set and suggestions on which variables would be informative. The code chunk below shows how I took the list that they provided and modified the `predM` object.
 
 ```{r}
 # Store the names of the variables in an object
@@ -742,8 +740,6 @@ pi_list <-
     "elig_cervical", "elig_breast", "elig_colon", "elig_bmi", "elig_flu", 
     "elig_chlam", "elig_smoking")
 
-
-
 ```
 
 Note that the investigator had me exclude the variables, `elig_colonoscopy`, `elig_flexsig`, and `elig_fobt`, because these have the exact same information as `elig_colon`. The eligibility for all these screenings is the same.
@@ -754,117 +750,102 @@ Also, we included `age_start` as a continuous variable and did not include the c
 
 
 ```{r}
-# Make a vaector of the variable names that we want to include.
+# Make a vector of the variable names that we want to include.
 vars_to_include <- var_names[(var_names %in% pi_list)]
 
-# varNames[!(varNames %in% JH_list)]
+# adjust the default prediction matrix for the variables we want to include
+pred <- predM    # Set equal to the orginal pred matrix
+pred[, ] <- 0    # change to all zeroes to clean it out
+pred[, vars_to_include] <- 1     # Set to 1 for variables that we want
+diag(pred) <- 0    # set the diagonal to zero (can't predict itself)
 
-pred <- predGuess
-pred[, ] <- 0
-pred[, vars_to_include] <- 1
-diag(pred) <- 0
-# head(pred)
-dim(pred)
-head(pred)
-```
-
-
-
-
-# Make the visiting scheme
-
-Pretty sure that this doesn't do anything.
-
-```{r}
-miOrder <- vars_to_include %>% 
-  match(., JH_list) %>% 
-  as.numeric(.)
-
-comboList <- data.frame(vars_to_include, JH_list) %>% 
-  cbind(., miOrder)
-  
-comboList %>% 
-  kable(.)
-
-```
-
-
-
-## Visting sequence
-
-This tells `mice` the order to impute the missing variables. I looked at high to low and low to high. Didn't seem to make a difference. van Buuren says that it would only really matter with longitudinal studies.
-
-`init$visitSequence` give the varaibles to be imputed and their column positions.
-
-```{r}
-init <- mice::mice(cardiac, maxit = 0)
-meth <- init$method
-predM <- init$predictorMatrix
-# print(ini)
- 
-
-init$visitSequence
-# ethnic.cat   race.cat    fpl.cat 
-#          5          7          8 
-```
-
-
-### Define the order for visiting
-
-FPL -> Race -> Ethnicity
-
-```{r}
-visit_order <- c(init$visitSequence[["fpl.cat"]], 
-                 init$visitSequence[["race.cat"]], 
-                 init$visitSequence[["ethnic.cat"]])
-```
-
-
-## Predictor matrices
-
-
-
-### Full list 
-
-```{r}
-pred <- predM
-pred[, ] <- 0
-pred[, vars_to_include] <- 1
-diag(pred) <- 0
-
+# take a glimpse
 head(pred[, 1:10], n = 10)
-
 ```
 
-# Imputations (FPL, Race, and Ethnicity)
+Note that there are 1s in the matrix for variables that we will not be imputing. This will have no impact.
 
-## Full list (41 vars)
+In the actual work, I made 3 scenarios:
 
-```{r, cache=FALSE}
+1. Full list of variables chosen by the investigator
+2. Reduced list of about half the number 
+3. Very reduced list based on the defaults from the software (2-3)
+
+Here in this example to keep it simple, I will just work with the full list. But the other scenarios could be created by adjusting the predictor matrix similar to above.
+
+
+### Step 4 - Decide how to impute variables that are functions of other (incomplete) variables
+
+Transformations, sum scores, etc. were not used in this data set so not much to consider here. In some cases, there can be a lot to think about particularly if a variable is transformed solely to meet the normality assumption in a regression model. So do a literature review if this issue applies to you.
+
+In my example, I mentioned above that I am including continous `age_start` instead of the categorical age. `fpl_cat` is a variable that is derived from a continuous value that had missingness. We considered to included the continuous value, but decided that it is more relevant to our question to look at binary `fpl_cat`.
+
+
+### Step 5 - Decide the order to impute the variables
+
+The defualt in the software goes by appearance in the data set left to right. It can be overwritten per the user's direction. This becomes more of an issue if there is a longitudinal nature to the data set where missingness at an earlier time point would affect the missingness later. So impute early to later.
+
+I examined the imputation order by magnitude of missingness: low to high and high to low. There did not seem to be a difference in performance or convergence, nor an impact to the estimates. In the actual work, we decided to impute from highest percent missing to lowest.
+
+The code `init$visitSequence` gives the variables to be imputed and their column positions that were chosen by the software by default. Shown in the next chunk.
+
+```{r}
+init$visitSequence
+```
+
+I override this with the following to order things as: FPL -> Race -> Ethnicity
+
+```{r}
+visit_order <- c(init$visitSequence[["fpl_cat"]], 
+                 init$visitSequence[["race_cat"]], 
+                 init$visitSequence[["ethnic_cat"]])
+visit_order
+```
+
+### Step 6 - Decide the number of iterations
+
+This is to ensure convergence. The default is 5. 10 to 20 are recommended. In actual practice, we chose 20. Here I will keep it set at 5 as defined above to keep the computation strain low.
+
+```{r}
+iter_num
+```
+
+### Step 7 - Decide on the number of multiply imputed data sets
+
+The rule of thumb from more recent authors is that the number of imputations should be similar to the percentage of cases (observations) that are incomplete (at least 5).
+
+The software default is 5 and we will use that for this example to keep computation time low. We had set this previously above.
+
+```{r}
+imp_num
+```
+
+## Run the algorithm
+
+All the setup work has been done and considerations made. Using the specifications that saved in objects above, we will run the `mice` command to impute the data sets.
+
+Note that I wrap this in the command `system.time()` to see how long it runs.
+
+```{r}
 system.time(
 imp_full <- 
-  mice::mice(data = cardiac, 
+  mice::mice(data = valdata, 
              m = imp_num,  # number of imputations, dflt = 5
              method = meth,  # specify the method
              predictorMatrix = pred, 
              visitSequence = visit_order, 
              seed = seed_for_imp, 
-             maxit = iter_num,  # number of interations, dflt = 5
+             maxit = iter_num,  # number of iterations, dflt = 5
              print = FALSE
              )
 )
- #   user  system elapsed 
- # 753.92   10.39  765.00 
 
-# with 20 imputations
-#    user  system elapsed 
-# 3782.48   25.14 3821.28
 ```
 
 ### Plot of convergence
 
 ```{r}
-plot(imp_full, c("ethnic.cat", "race.cat", "fpl.cat"))
+plot(imp_full, c("ethnic_cat", "race_cat", "fpl_cat"))
 ```
 
 
@@ -898,6 +879,8 @@ head(output)
 tail(output)
 
 ```
+
+TODO Fix the function below for the cleaned variable names
 
 
 ```{r}
