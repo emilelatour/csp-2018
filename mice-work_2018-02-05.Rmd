@@ -684,7 +684,7 @@ Assuming MAR is typically a reasonable place to start. There is literature on se
 
 ### Step 2 - Decide on the form of the imputation model
 
-## Specify the methods for imputing the missing values
+We want to decide the form of the model used to impute the missing values of each variable. This can be specified on a variable by variable basis. We saw above from the `meth` object that the software made default decisions for us. 
 
 __FPL__ -- logistic regression (`logreg`), for factor with 2 levels.
 
@@ -692,85 +692,70 @@ __Race__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
 
 __Ethnicity__ -- Multinomial logit regression (`polyreg`), factor with > 2 levels.
 
+I am going to overwrite those just to show how it is done. By overwriting the meth object we can force the algorithm to use this later.
+
 ```{r}
-meth[c("ethnic.cat")] <- "polyreg"
-meth[c("race.cat")] <- "polyreg"
-meth[c("fpl.cat")] <- "logreg"
+meth[c("ethnic_cat")] <- "polyreg"
+meth[c("race_cat")] <- "polyreg"
+meth[c("fpl_cat")] <- "logreg"
 meth
 ```
 
-
-
-
-## Variables to include
+### Step 3 - Decide the set of predictors to include in the imputation model
 
 What variables to include in the multiple imputation model? 
 
-The advice is to include at least the same variables that are in your scientific model of interest. 
+The advice is to include as many relevant variables as possible. One should include all variables that are in your scientific model of interest that will be used after imputation. Also variables that are related to the missingness of the variables you are imputing. Van Buuren has more advice here.
 
-## Quick predictor matrix
+Including as many predictors as possible makes the MAR assumption more reasonable. But with larger data sets, this is not advisable for computation purposes. Van Buuren suggests that 15 to 25 variables will work well. He also offers advice to cull that list.
 
-According to van Burren the `predictormatrix` function is useful for dealing with data sets with large number of variables. 
+My case is interesting. I am not doing modelling; I am calculating scalar statistics of agreement. Also, my data set isn't really too large (41 variables once you ignore study ID which isn't too important for imputation purposes). 
 
-Only show the matrix below for those records with > 1 rows or columns
+To aid in these decisions the `mice` package has a function that produces a "quick predictor matrix" that is useful for dealing with data sets with large number of variables. The software chooses by calculating two correlations with the avaialable cases, taking the larger, and seeing if it meets a minimum theshhold. See `?quickpred` for better description.
+
+Below I run the `quickpred()` to see what the software chooses. Only show the matrix below for those records with > 1 rows or columns
 
 ```{r}
 predGuess <- valdata %>% 
   mice::quickpred(.)
 
-predGuess[rowSums(predGuess) > 0, colSums(predGuess) > 0] %>% 
-  kable()
+predGuess[rowSums(predGuess) > 0, colSums(predGuess) > 0]
 
 ```
 
+Hmmm. As I am working through this example with the simulated data, the software did not choose any. In my actual work, it discovered about 2 to 3 important predictors for each variable.
 
-# Variables to include
-
-A list of variables was ordered and curated by John Heintzman.
+In my actual work, I went to the lead investigator for insight into the data set and suggestions on which variables would be informative. The code chunk below shows how I took the list that they provided and modified the `predM` oject.
 
 ```{r}
+# Store the names of the variables in an object
+var_names <- dput(names(valdata))
 
-varNames <- 
-  c("StudyID", "sex", "age_start", # "FPL_PERCENTAGE", 
-    "PrimaryDept", "ethnic.cat", "lang.cat", "race.cat", 
-    "fpl.cat", "age.cat", "ELIG_cervical", "ELIG_breast", 
-    "ELIG_colon", "ELIG_colonoscopy", "ELIG_flexsig", 
-    "ELIG_FOBT", "ELIG_BMI", "ELIG_Flu", "ELIG_chlam", 
-    "ELIG_smoking", "ELIG_cholest", "DMAP_cervical", 
-    "DMAP_breast", "DMAP_colon", "DMAP_colonoscopy", 
-    "DMAP_flexsig", "DMAP_FOBT", "DMAP_BMI", "DMAP_Flu", 
-    "DMAP_chlam", "DMAP_smoking", "DMAP_cholest", "EHR_cervical", 
-    "EHR_breast", "EHR_colon", "EHR_colonoscopy", "EHR_FlexSig", 
-    "EHR_FOBT", "EHR_BMI", "EHR_Weight", "EHR_Flu", "EHR_chlam", 
-    "EHR_smoking", "EHR_cholest")
+# create another vector of the names selected by the investigator
+pi_list <-
+  c("fpl_cat", "race_cat", "ethnic_cat", "lang_cat", "age_start", "sex", 
+    "primary_dept", "ehr_cervical", "ehr_breast", "ehr_colon", 
+    "ehr_colonoscopy", "dmap_breast", "dmap_colonoscopy", "ehr_cholest", 
+    "dmap_cholest", "elig_cholest", "ehr_flexsig", "ehr_fobt", "ehr_bmi", 
+    "ehr_flu", "ehr_chlam", "ehr_smoking", "dmap_cervical", "dmap_colon", 
+    "dmap_flexsig", "dmap_fobt", "dmap_bmi", "dmap_flu", "dmap_chlam", 
+    "elig_cervical", "elig_breast", "elig_colon", "elig_bmi", "elig_flu", 
+    "elig_chlam", "elig_smoking")
 
-# JH_list <- 
-#   c("fpl.cat", "race.cat", "ethnic.cat", "lang.cat", "age_start", "sex", 
-#     "PrimaryDept", "EHR_cervical", "EHR_breast", "EHR_colon", 
-#     "EHR_colonoscopy", "DMAP_breast", "DMAP_colonoscopy", "EHR_cholest", 
-#     "DMAP_cholest", "CholestScreen_elig", "EHR_FlexSig", "EHR_FOBT", 
-#     "EHR_BMI", "EHR_Weight", "EHR_Flu", "EHR_chlam", "EHR_smoke", 
-#     "DMAP_cervical", "DMAP_colon", "DMAP_flexsig", "DMAP_FOBT", "DMAP_BMI", 
-#     "DMAP_Flu", "DMAP_chlam", "CervicalScreen_elig", "BreastScreen_elig", 
-#     "ColonScreen_elig", "BMIScreen_elig", "FluVac_elig", "ChlamydScreen_elig", 
-#     "TobaccoScreen_elig"
-#     )
 
-JH_list <- 
-  c("fpl.cat", "race.cat", "ethnic.cat", "lang.cat", "age_start", "sex", 
-    "PrimaryDept", "EHR_cervical", "EHR_breast", "EHR_colon", 
-    "EHR_colonoscopy", "DMAP_breast", "DMAP_colonoscopy", "EHR_cholest", 
-    "DMAP_cholest", "ELIG_cholest", "EHR_FlexSig", "EHR_FOBT", 
-    "EHR_BMI", "EHR_Weight", "EHR_Flu", "EHR_chlam", "EHR_smoking", 
-    "DMAP_cervical", "DMAP_colon", "DMAP_flexsig", "DMAP_FOBT", "DMAP_BMI", 
-    "DMAP_Flu", "DMAP_chlam", "ELIG_cervical", "ELIG_breast", 
-    "ELIG_colon", "ELIG_BMI", "ELIG_Flu", "ELIG_chlam", 
-    "ELIG_smoking"
-    )
-# Remove
-# "StudyID", "FPL_PERCENTAGE", "age.cat", "DMAP_smoking"
 
-vars_to_include <- varNames[(varNames %in% JH_list)]
+```
+
+Note that the investigator had me exclude the variables, `elig_colonoscopy`, `elig_flexsig`, and `elig_fobt`, because these have the exact same information as `elig_colon`. The eligibility for all these screenings is the same.
+
+We also did not include `dmap_smoking` because there was little to no information here.
+
+Also, we included `age_start` as a continuous variable and did not include the categorical version of this variable, `age_cat`, hoping to get more information.
+
+
+```{r}
+# Make a vaector of the variable names that we want to include.
+vars_to_include <- var_names[(var_names %in% pi_list)]
 
 # varNames[!(varNames %in% JH_list)]
 
@@ -782,6 +767,9 @@ diag(pred) <- 0
 dim(pred)
 head(pred)
 ```
+
+
+
 
 # Make the visiting scheme
 
