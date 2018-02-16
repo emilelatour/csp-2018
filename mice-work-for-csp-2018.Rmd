@@ -689,13 +689,13 @@ output_nested %>%
   dplyr::select(proc:stat, qbar) %>% 
   tidyr::spread(., key = stat, value = qbar) %>% 
   dplyr::select(
-    "proc", "cat", "level", 
-    "n", "a", "b", "c", "d", 
-    "EHR.n", "EHR.p", "DMAP.n", "DMAP.p", "Combo.n", "Combo.p", 
-    "Po", "Pe", 
-    "Ppos", "Pneg", "sens", "spec", 
-    "kap", "Kmax", "Kmin", 
-    "BI", "PI", "PABAK"
+    proc, cat, level, 
+    n, a, b, c, d, 
+    EHR.n, EHR.p, DMAP.n, DMAP.p, Combo.n, Combo.p, 
+    Po, Pe, 
+    Ppos, Pneg, sens, spec, 
+    kap, Kmax, Kmin, 
+    BI, PI, PABAK
   ) %>% 
   knitr::kable(
     booktabs = TRUE, 

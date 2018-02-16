@@ -1,7 +1,7 @@
 Example of work to impute, analyze, and pool agreement statistics
 ================
 Emile Latour
-2018-02-15
+2018-02-16
 
 Simulate a data set
 ===================
@@ -157,7 +157,7 @@ In the figure below, we get an overview of the missing values in the data set. M
 naniar::vis_miss(valdata)
 ```
 
-![](mice-work_2018-02-05_files/figure-markdown_github/unnamed-chunk-3-1.png)
+![](mice-work-for-csp-2018_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
 We can also get a numeric percent missing for the variables.
 
@@ -193,7 +193,7 @@ valdata %>%
                    cluster = TRUE)
 ```
 
-![](mice-work_2018-02-05_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](mice-work-for-csp-2018_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
 ### The `VIM` package
 
@@ -214,7 +214,7 @@ valdata %>%
             ylab = c("Histogram of missing data","Pattern"))
 ```
 
-![](mice-work_2018-02-05_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](mice-work-for-csp-2018_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 
      Variables sorted by number of missings: 
@@ -703,7 +703,7 @@ imp_full <-
 ```
 
        user  system elapsed 
-     312.94    0.91  317.00 
+     295.12    0.84  297.79 
 
 That's elapsed time in seconds.
 
@@ -715,7 +715,7 @@ We plot the values of mean and standard deviation for each variable by number of
 plot(imp_full, c("ethnic_cat", "race_cat", "fpl_cat"))
 ```
 
-![](mice-work_2018-02-05_files/figure-markdown_github/unnamed-chunk-25-1.png)
+![](mice-work-for-csp-2018_files/figure-markdown_github/unnamed-chunk-25-1.png)
 
 Calculating results and pooling
 ===============================
@@ -995,13 +995,13 @@ output_nested %>%
   dplyr::select(proc:stat, qbar) %>% 
   tidyr::spread(., key = stat, value = qbar) %>% 
   dplyr::select(
-    "proc", "cat", "level", 
-    "n", "a", "b", "c", "d", 
-    "EHR.n", "EHR.p", "DMAP.n", "DMAP.p", "Combo.n", "Combo.p", 
-    "Po", "Pe", 
-    "Ppos", "Pneg", "sens", "spec", 
-    "kap", "Kmax", "Kmin", 
-    "BI", "PI", "PABAK"
+    proc, cat, level, 
+    n, a, b, c, d, 
+    EHR.n, EHR.p, DMAP.n, DMAP.p, Combo.n, Combo.p, 
+    Po, Pe, 
+    Ppos, Pneg, sens, spec, 
+    kap, Kmax, Kmin, 
+    BI, PI, PABAK
   ) %>% 
   knitr::kable(
     booktabs = TRUE, 
@@ -1236,4 +1236,4 @@ lubridate::as.period(
   )
 ```
 
-    [1] "7M 40.9540002346039S"
+    [1] "7M 24.6211869716644S"
