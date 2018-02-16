@@ -1,7 +1,7 @@
 ---
-title: "Untitled"
+title: "Example of work to impute, analyze, and pool agreement statistics"
 author: "Emile Latour"
-date: "February 5, 2018"
+date: '`r Sys.Date()`'
 output: github_document
 ---
 
@@ -32,7 +32,7 @@ options(scipen = 999)
 # If you don't define format here, you'll need put `format = "html"` in 
 # every kable function.
 
-options(knitr.table.format = "html")  # use this option when knitting html
+# options(knitr.table.format = "html")  # use this option when knitting html
 # options(knitr.table.format = "latex")  # use this option when knitting pdf
 
 ## Set random seed ----------------
@@ -107,321 +107,11 @@ Disclaimer: All the data in this example is simulated from the following code. A
 
 ## Simulate the data
 
-```{r make-fake-data, results=FALSE}
+```{r make-simulated-data, results=FALSE}
 
-#### Set the variable names --------------------------------
+source(here::here("src", "simulate-data-set.R"))
 
-var_names <- c("study_id",
-               "sex",
-               "age_start",
-               "primary_dept",
-               "ethnic_cat",
-               "lang_cat",
-               "race_cat",
-               "fpl_cat",
-               "age_cat",
-               "elig_cervical",
-               "elig_breast",
-               "elig_colon",
-               "elig_colonoscopy",
-               "elig_flexsig",
-               "elig_fobt",
-               "elig_bmi",
-               "elig_flu",
-               "elig_chlam",
-               "elig_smoking",
-               "elig_cholest",
-               "dmap_cervical",
-               "dmap_breast",
-               "dmap_colon",
-               "dmap_colonoscopy",
-               "dmap_flexsig",
-               "dmap_fobt",
-               "dmap_bmi",
-               "dmap_flu",
-               "dmap_chlam",
-               "dmap_smoking",
-               "dmap_cholest",
-               "ehr_cervical",
-               "ehr_breast",
-               "ehr_colon",
-               "ehr_colonoscopy",
-               "ehr_flexsig",
-               "ehr_fobt",
-               "ehr_bmi",
-               "ehr_flu",
-               "ehr_chlam",
-               "ehr_smoking",
-               "ehr_cholest"
-)
-
-
-#### Make an empty tibble --------------------------------
-
-## Pre-set the number of rows for the data set ----------------
-
-size <- 14000
-
-## Create tibble with NA's ----------------
-
-valdata <- tibble::as.tibble(matrix(NA, nrow = size, ncol = length(var_names)))
-names(valdata) <- var_names
-
-
-#### Make the demographic data --------------------------------
-
-## Function to help make factor variables ----------------
-
-make_factor <- function(levels, size, replace = TRUE, prob = NULL) { 
-  
-  if (is.null(prob)) { 
-    
-    factor(sample(levels, size, replace))
-    
-  } else {
-      
-    factor(sample(levels, size, replace, prob))
-  }
-}
-
-## Make the demographic data ----------------
-# Note that the proportions for the demographic categories are made up and
-# decided upon by me. I intended for them to be similar in magnitude to the
-# original study data, but different enough that they could not be compared to 
-# or construed to be original values. Variables with percent missing are the 
-# same ones as my previous work, but the percent missing is slightly different 
-# with rounding.
-
-# 3 group sizes for age groups
-a <- floor(size / 3)
-b <- a
-c <- size - a - b
-
-valdata %<>% 
-  mutate(
-    study_id = seq(1:size), 
-    sex = make_factor(levels = c("F", "M"), 
-                      size = size, 
-                      prob = c(0.65, 0.35)), 
-    age_start = c(sample(c(19:34), size = a, replace = TRUE), 
-                  sample(c(35:50), size = b, replace = TRUE), 
-                  sample(c(51:64), size = c, replace = TRUE)
-    ), 
-    age_start = sample(age_start, 
-                       size = size, 
-                       replace = FALSE), 
-    age_cat = cut(age_start, 
-                  breaks = c(19, 35, 51, 65), 
-                  right = FALSE), 
-    primary_dept = make_factor(levels = 
-                                 stringr::str_pad(c(1:40), 3, pad = "0"), 
-                               size = size), 
-    ethnic_cat = make_factor(levels = 
-                               c("Hispanic", "NH White", "NH Other", NA), 
-                             size = size, 
-                             prob = c(0.10, 0.70, 0.15, 0.05)), 
-    lang_cat = make_factor(levels = c("English", "Spanish", "Other"), 
-                           size = size, 
-                           prob = c(0.85, 0.05, 0.10)), 
-    race_cat = make_factor(
-      levels = c("API", "AIAN", "Black", "White", "Multiple Races", NA), 
-      size = size, 
-      prob = c(0.05, 0.02, 0.10, 0.75, 0.01, 0.07)), 
-    fpl_cat = make_factor(levels = c("<=138% FPL", ">138% FPL", NA), 
-                          size = size, 
-                          prob = c(0.75, 0.05, 0.20))
-  )
-
-# drop variabls no longer needed
-rm(a, b, c)
-
-
-#### Make the eligibility variables --------------------------------
-# The original study paper outlined the criteria to be eligible for certain
-# screening services. They tended to be based on sex, age, and medical history.
-# I will not be generating variables for the relevant medical history for
-# eligibility. For the purpose of this simulated data set, I will base
-# eligibility only on sex and age.
-
-# 1 = eligible
-# 0 = not eligible
-
-# Function to convert to factors 
-make_factor2 <- function(var) {
-  factor(var, levels = c("1", "0"))
-}
-
-valdata %<>% 
-  mutate(
-    elig_cervical = 
-      ifelse(sex == "F" & age_start >= 19 & age_start <= 64, 1, 0), 
-    elig_breast = 
-      ifelse(sex == "F" & age_start >= 40, 1, 0), 
-    elig_colon = 
-      ifelse(age_start >= 50, 1, 0), 
-    elig_colonoscopy = 
-      ifelse(age_start >= 50, 1, 0), 
-    elig_flexsig = 
-      ifelse(age_start >= 50, 1, 0), 
-    elig_fobt = 
-      ifelse(age_start >= 50, 1, 0),  
-    elig_bmi = 1, 
-    elig_flu = 
-      ifelse(age_start >= 50, 1, 0), 
-    elig_chlam = 
-      ifelse(sex == "F" & age_start >= 19 & age_start <= 24, 1, 0), 
-    elig_smoking = 1, 
-    elig_cholest = 
-      ifelse(age_start >= 20, 1, 0)) %>% 
-  mutate_at(.vars = vars(elig_cervical:elig_cholest), 
-            .funs = funs(make_factor2))
-
-
-#### Make factor screening variables --------------------------------
-# A patient must be elgible to recieve a screening service. Those that are
-# eligible based on the step above will be randomly assigned 1/0 (screened/not
-# screened); those that are not elgible will be assigned 0 (not screened).
-
-## Function to help make the screening data ----------------
-# Split the data set into eligible and not eligible. Randomly assign
-# screen/not-screened to those that are eligible. Not screened to those that are
-# not elgibile. Combine the split data sets.
-
-# Returns a data frame / tibble.
-
-make_screening <- function(df, 
-                           elig_var, 
-                           dmp_scr, 
-                           ehr_scr, 
-                           dmp_prob, 
-                           ehr_prob) { 
-  
-  require(rlang)
-  require(dplyr)
-  
-  elig_enq <- enquo(elig_var)
-  dmp_enq <- enquo(dmp_scr)
-  dmp_name <- quo_name(dmp_enq)
-  ehr_enq <- enquo(ehr_scr)
-  ehr_name <- quo_name(ehr_enq)
-  
-  num_elig <- df %>% 
-    dplyr::filter(!! elig_enq == 1) %>% 
-    dplyr::count(!! elig_enq) %>% 
-    dplyr::pull()
-  
-  num_not_elig <- df %>% 
-    dplyr::filter(!! elig_enq != 1) %>% 
-    dplyr::count(!! elig_enq) %>% 
-    dplyr::pull()
-  
-  df_elig <- df %>% 
-    dplyr::filter(!! elig_enq == 1) %>% 
-    mutate(
-      !! dmp_name := rbinom(n = num_elig, size = 1, prob = dmp_prob), 
-      !! ehr_name := rbinom(n = num_elig, size = 1, prob = ehr_prob), 
-      !! dmp_name := factor(!! dmp_enq, levels = c(1, 0)), 
-      !! ehr_name := factor(!! ehr_enq, levels = c(1, 0))
-    )
-  
-  df_not_elig <- df %>% 
-    dplyr::filter(!! elig_enq != 1) %>% 
-    mutate(
-      !! dmp_name := 0, 
-      !! ehr_name := 0, 
-      !! dmp_name := factor(!! dmp_enq, levels = c(1, 0)), 
-      !! ehr_name := factor(!! ehr_enq, levels = c(1, 0))
-    )
-    
-  df_elig %>% 
-    dplyr::bind_rows(., df_not_elig) %>% 
-    dplyr::arrange(., study_id)
-
-}
-
-## Make the screenings values ----------------
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_cervical, 
-                          dmp_scr = dmap_cervical, 
-                          ehr_scr = ehr_cervical, 
-                          dmp_prob = 0.30, 
-                          ehr_prob = 0.30)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_breast, 
-                          dmp_scr = dmap_breast, 
-                          ehr_scr = ehr_breast, 
-                          dmp_prob = 0.40, 
-                          ehr_prob = 0.40)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_colon, 
-                          dmp_scr = dmap_colon, 
-                          ehr_scr = ehr_colon, 
-                          dmp_prob = 0.30, 
-                          ehr_prob = 0.30)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_colonoscopy, 
-                          dmp_scr = dmap_colonoscopy, 
-                          ehr_scr = ehr_colonoscopy, 
-                          dmp_prob = 0.10, 
-                          ehr_prob = 0.10)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_flexsig, 
-                          dmp_scr = dmap_flexsig, 
-                          ehr_scr = ehr_flexsig, 
-                          dmp_prob = 0.05, 
-                          ehr_prob = 0.05)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_fobt, 
-                          dmp_scr = dmap_fobt, 
-                          ehr_scr = ehr_fobt, 
-                          dmp_prob = 0.15, 
-                          ehr_prob = 0.30)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_bmi, 
-                          dmp_scr = dmap_bmi, 
-                          ehr_scr = ehr_bmi, 
-                          dmp_prob = 0.05, 
-                          ehr_prob = 0.85)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_flu, 
-                          dmp_scr = dmap_flu, 
-                          ehr_scr = ehr_flu, 
-                          dmp_prob = 0.35, 
-                          ehr_prob = 0.40)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_chlam, 
-                          dmp_scr = dmap_chlam, 
-                          ehr_scr = ehr_chlam, 
-                          dmp_prob = 0.50, 
-                          ehr_prob = 0.40)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_smoking, 
-                          dmp_scr = dmap_smoking, 
-                          ehr_scr = ehr_smoking, 
-                          dmp_prob = 0.05, 
-                          ehr_prob = 0.95)
-
-valdata <- make_screening(df = valdata, 
-                          elig_var = elig_cholest, 
-                          dmp_scr = dmap_cholest, 
-                          ehr_scr = ehr_cholest, 
-                          dmp_prob = 0.40, 
-                          ehr_prob = 0.40)
-
-
-#### Remove what's no longer needed --------------------------------
-
-rm(make_factor, make_factor2, make_screening, size, var_names)
+valdata <- make_sim_data(n_rows = 14000, seed = seed_for_imp)
 
 ```
 
@@ -432,17 +122,13 @@ dplyr::glimpse(valdata)
 ```
 
 
-TODO -- Change the name of the data set everywhere else.
-TODO -- test the user functions
-
-
 # EDA / explore missingness
 
 ## Table One
 
 A quick table one to look at the demographics of the sample data.
 
-```{r}
+```{r, results='asis'}
 #### Create a table one --------------------------------
 # Table one summary stats using the tableone package
 
@@ -465,8 +151,7 @@ print_table_one <- . %>%
         ) %>% 
   as.data.frame(.) %>% 
   tibble::rownames_to_column(., var = "rowname") %>% 
-  knitr::kable(format = "html", 
-               booktabs = TRUE, 
+  knitr::kable(booktabs = TRUE, 
                longtable = TRUE, 
                col.names = c("", names(.)[-1])) %>% 
   kableExtra::kable_styling(full_width = FALSE, 
@@ -495,7 +180,7 @@ We can also get a numeric percent missing for the variables.
 
 ```{r}
 miss_var_summary(valdata) %>% 
-  head(.)
+  head(., n = 10)
 ```
 
 ### Setting `cluster = TRUE`
@@ -513,7 +198,7 @@ valdata %>%
 
 ```
 
-### The `VIM`package
+### The `VIM` package
 
 The [`VIM`](https://cran.r-project.org/web/packages/VIM/VIM.pdf) package also has many helpful tools for visualizing missing values. I really like their combination bar plot and aggregation plot. 
 
@@ -723,6 +408,8 @@ predGuess[rowSums(predGuess) > 0, colSums(predGuess) > 0]
 
 Hmm. As I am working through this example with the simulated data, the software did not choose any. In my actual work, it discovered about 2 to 3 important predictors for each variable.
 
+Since we randomly generated each variable _independently_, there should not be a high correlation between them. So as surprised as I was at first, this really does makes sense.
+
 In my actual work, I went to the lead investigator for insight into the data set and suggestions on which variables would be informative. The code chunk below shows how I took the list that they provided and modified the `predM` object.
 
 ```{r}
@@ -842,30 +529,42 @@ imp_full <-
 
 ```
 
+That's elapsed time in seconds.
+
 ### Plot of convergence
+
+We plot the values of mean and standard deviation for each variable by number of iteration. We want to look for mixing of the lines and we do not want to see any trend.
 
 ```{r}
 plot(imp_full, c("ethnic_cat", "race_cat", "fpl_cat"))
 ```
 
 
-# Look at the imputed data sets
+# Calculating results and pooling
+
+Now that we have out imputed data sets, we want to analyze each of them and then pool the results.
+
+When pooling results, the `mice` software has tools to help whether pooling model results or scalar estimates. Things get messy quickly because I am calculating a number of agreement statistics, for 11 procedures, with 7 categorical variables, and each categorical variable has a number of levels.
+
+When I first did these steps, I wrote many nested for loops. While this worked and it ran, it was slow and a little bit like a black box. A wise person once said that if you you find yourself using nested for loops in R then you should consider using the functions from the `purrr` package. They were right. I didn't compare speed with the previous approach, but the way I present here has clear points where you can check that things make sense. This advantage makes the choice clear for me.
+
+The first step in wrangling the results is to get the separate imputed data sets into one data frame with a variable to track which imputation number the data came from.
 
 ```{r}
 
-mylist <- list() #create an empty list
+# Create an empty list
+mylist <- list() 
 
+# Put the imputed sets into the list
 for (i in 1:imp_full$m) {
-  
   mylist[[i]] <- mice::complete(imp_full, i)
-  
 }
 
-mylist[[1]]
+# mylist[[1]]
 
-
-output <- tibble::enframe(mylist, name = "imp", value = "data") %>% 
-  tidyr::unnest()
+# Take the list and stack the data sets into a data frame
+# with an indication for the number of imputed data set
+output <- dplyr::bind_rows(mylist, .id = "n_imp")
 
 # This would do the same thing, maybe faster, but the above has the added 
 # benefit of easily adding the number of the imputation so that I can track 
@@ -873,176 +572,149 @@ output <- tibble::enframe(mylist, name = "imp", value = "data") %>%
 # df <- do.call(rbind, mylist)
 # df
 
-# Should be 393,030 rows = 30 sets X 13101 rows per set
+# Check it out that the dimensions make sense and spot check the data
 dplyr::glimpse(output)
-head(output)
-tail(output)
+# dim(output)
+# head(output)
+# tail(output)
 
 ```
 
-TODO Fix the function below for the cleaned variable names
-
+Then I gather the data into a tidy format so that I can group by category or imputation number or whatever I want really. I employ a user written function because it's a little bit of work to do this.
 
 ```{r}
-make_cardiac_long <- function(df) { 
-  
-  # Reshape ELIG, DMAP, and EHR
-  df_long <- df %>% 
-    tidyr::gather(data = ., 
-                  key = "vars", 
-                  value = "value", 
-                  ELIG_cervical:EHR_cholest) %>% 
-    tidyr::separate(col = vars, 
-                    into = c("EHR_DMAP_ELIG", "proc"), 
-                    sep = "_", 
-                    remove = TRUE) %>% 
-    dplyr::mutate(proc = case_when(
-      proc == "BMI" ~ "bmi", 
-      proc == "FlexSig" ~ "flexsig", 
-      proc == "FOBT" ~ "fobt", 
-      proc == "Weight" ~ "weight", 
-      TRUE ~ proc
-    )) %>% 
-    tidyr::spread(data = ., 
-                  key = EHR_DMAP_ELIG, 
-                  value = value)
-  
-  # Gather the categories
-  df_long %<>% 
-    tidyr::gather(data = ., 
-                  key = "cat", 
-                  value = "level", 
-                  sex, ethnic.cat:age.cat) %>% 
-    mutate(cat = case_when(
-      cat == "age.cat" ~ "age", 
-      cat == "ethnic.cat" ~ "ethnicity", 
-      cat == "fpl.cat" ~ "fpl", 
-      cat == "lang.cat" ~ "language", 
-      cat == "race.cat" ~ "race", 
-      TRUE ~ cat
-    ))
-  
-  
-  # Pick one category and dummy the category and the levels
-  # And bind the all back to the long data
-  df_long %<>% 
-    dplyr::filter(cat == "sex") %>% 
-    mutate(cat = "all", 
-           level = "all") %>% 
-    dplyr::bind_rows(., df_long)
-  
-  df_long %>%
-    dplyr::select(imp, 
-                  StudyID,
-                  age_start,
-                  PrimaryDept,
-                  proc, 
-                  cat,
-                  level, 
-                  ELIG, 
-                  EHR, 
-                  DMAP
-                  )
-  
-  }
+source(here::here("src", "make_df_long.R"))
+output_long <- make_df_long(df = output)
+
 ```
 
+We can check that this works by grouping by category and checking that the sums and counts of some of the variables match.
 
 ```{r}
-
-
-df <- make_cardiac_long(df = output)
-
-df
-
-df %>% 
+output_long %>% 
   group_by(cat) %>% 
   summarise(
     n = n(), 
-    ELIG = sum(as.numeric(ELIG), na.rm = TRUE), 
-    EHR = sum(as.numeric(EHR), na.rm = TRUE), 
-    DMAP = sum(as.numeric(DMAP), na.rm = TRUE), 
-    id = sum(as.numeric(StudyID), na.rm = TRUE), 
+    ELIG = sum(as.numeric(elig), na.rm = TRUE), 
+    EHR = sum(as.numeric(ehr), na.rm = TRUE), 
+    DMAP = sum(as.numeric(dmap), na.rm = TRUE), 
+    id = sum(as.numeric(study_id), na.rm = TRUE), 
     age = sum(age_start, na.rm = TRUE)
   )
 
-
-
 ```
 
+I now want the data to be grouped by (1) procedure, (2) category, (3) level, and (4) imputation number.
 
 ```{r}
-df_nested <- df %>% 
-  group_by(proc, cat, level, imp) %>% 
+output_nested <- output_long %>% 
+  group_by(proc, cat, level, n_imp) %>% 
   nest()
 
-
-
-df_nested
-df_nested$data[[1]]
-head(df_nested$data[[1]])
-tail(df_nested$data[[1]])
-
-
+output_nested %>% 
+  head(., n = 10)
+# df_nested$data[[1]]
+# head(df_nested$data[[1]])
+# tail(df_nested$data[[1]])
 
 ```
 
-
+We now have a nested column of the data by the groups and imputations that we want. Next, we need to calculate two columns: Q - the estimates, and U - their standard errors. These needed user written functions to make the process automated and efficient.
 
 ```{r, warning=FALSE}
 
-foo <- df_nested %>% 
+source(here::here("src", "calc-stats.R"))
+output_nested %<>% 
   mutate(Q = purrr::map(.x = data, .f = calc_stats_p), 
          U = purrr::map(.x = data, .f = calc_stats_se))
 
-foo
-foo$data[[1]]
+output_nested %>% 
+  head(., n = 10)
+# output_nested$Q[[1]]
+# output_nested$U[[1]]
+```
 
-bar <- foo %>% 
+Next, we want to unnest the results from calculating the statistics and the standard errors.
+
+```{r, warning=FALSE}
+
+output_nested %<>% 
   tidyr::unnest(Q, U) %>% 
-  dplyr::rename(Q = Q, 
-                U = Q1) %>% 
   dplyr::select(-stat1) %>% 
-  dplyr::filter(! (stat %in% c("EHR.t", "DMAP.t", "Combo.t"))) %>% 
-  mutate_at(.vars = vars(Q, U), .funs = funs(as.numeric))
+  mutate_at(.vars = vars(Q, U), 
+            .funs = funs(as.numeric))
 
+output_nested %>% 
+  head(., n = 10)
+```
 
-bar <- bar %>% 
+We want to re-`group_by` the data by procedure, category, level, and type of statistic. This step gives us the nested estimates and variances for all the imputed sets which we can now pool the resuls.
+
+```{r, wearning=FALSE}
+output_nested %<>% 
   group_by(proc, cat, level, stat) %>% 
   nest()
 
-bar$data[[1]]
 
-bar <- bar %>% 
+```
+
+Pool and unnest. Note that my user written function `mi_pool` is really just a wrapper for the `pool.scalar()` function in the `mice` package.
+
+```{r, warning=FALSE}
+output_nested %<>% 
   mutate(pooled = purrr::map(.x = data, .f = mi_pool))
 
-baz <- bar %>% 
+output_nested %>% 
+  head(., n = 10)
+
+```
+
+Unnest the pooled results, we see that for each procedure, by category, by strata, we have for each statistic, the results that the pooling in `mice` provides.
+
+```{r}
+output_nested %<>% 
   unnest(pooled)
 
-
+output_nested %>% 
+  dplyr::select(-data) %>% 
+  dplyr::glimpse(.)
 ```
 
-```{r}
+The value `qbar` is the pooled post-imputation estimate that we are most interested. See the `mice` documenation for information on the rest. So if we just want to get those results for all the agreement statistics:
 
-baz %>% 
+Annoyingly the variables are in alphabetical order when they are unnnested, so I add an extra `select` command to order them
+
+```{r}
+output_nested %>% 
   dplyr::select(proc:stat, qbar) %>% 
-  tidyr::spread(., key = stat, value = qbar)
+  tidyr::spread(., key = stat, value = qbar) %>% 
+  dplyr::select(
+    "proc", "cat", "level", 
+    "n", "a", "b", "c", "d", 
+    "EHR.n", "EHR.p", "DMAP.n", "DMAP.p", "Combo.n", "Combo.p", 
+    "Po", "Pe", 
+    "Ppos", "Pneg", "sens", "spec", 
+    "kap", "Kmax", "Kmin", 
+    "BI", "PI", "PABAK"
+  ) %>% 
+  knitr::kable(
+    booktabs = TRUE, 
+    digits = 2
+  )
 
 ```
 
+Well, the procedures and the categories need should be arranged differently for formal presentation. But that's pretty straightforward so I hope that you forgive me for stopping here. Thanks for reading!
+
+# Check the run time
+
+I saved an object above when this all started to run. Now I want to see how long it took.
+
 ```{r}
+end_time <- Sys.time()
 
-baz %>% 
-  group_by(proc, cat, level) %>% 
-  count()
-
-
-12 * 19
-
-
-length(unique(baz$level))
-length(unique(baz$cat))
-length(unique(baz$proc))
-
+lubridate::as.period(
+  lubridate::interval(start_time, end_time)
+  )
 ```
 
