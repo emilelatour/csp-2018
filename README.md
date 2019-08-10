@@ -1648,18 +1648,13 @@ I override this with the following to order things as: FPL -&gt; Race
 -&gt; Ethnicity
 
 ``` r
-visit_order <- c(init$visitSequence[["fpl_cat"]], 
-                 init$visitSequence[["race_cat"]], 
-                 init$visitSequence[["ethnic_cat"]])
-```
-
-    Error in init$visitSequence[["fpl_cat"]]: subscript out of bounds
-
-``` r
+visit_order <- c("fpl_cat",  
+                 "race_cat", 
+                 "ethnic_cat")
 visit_order
 ```
 
-    Error in eval(expr, envir, enclos): object 'visit_order' not found
+    [1] "fpl_cat"    "race_cat"   "ethnic_cat"
 
 ### Step 6 - Decide the number of iterations
 
@@ -1713,7 +1708,8 @@ imp_full <-
 )
 ```
 
-    Error in check.visitSequence(visitSequence, data = data, where = where, : object 'visit_order' not found
+       user  system elapsed 
+    225.885  10.014 237.109 
 
 That’s elapsed time in seconds.
 
@@ -1727,7 +1723,7 @@ not want to see any trend.
 plot(imp_full, c("ethnic_cat", "race_cat", "fpl_cat"))
 ```
 
-    Error in plot(imp_full, c("ethnic_cat", "race_cat", "fpl_cat")): object 'imp_full' not found
+![](README_files/figure-markdown_github/unnamed-chunk-25-1.png)
 
 Calculating results and pooling
 ===============================
@@ -1761,11 +1757,7 @@ mylist <- list()
 for (i in 1:imp_full$m) {
   mylist[[i]] <- mice::complete(imp_full, i)
 }
-```
 
-    Error in eval(expr, envir, enclos): object 'imp_full' not found
-
-``` r
 # mylist[[1]]
 
 # Take the list and stack the data sets into a data frame
@@ -1782,8 +1774,51 @@ output <- dplyr::bind_rows(mylist, .id = "n_imp")
 dplyr::glimpse(output)
 ```
 
-    Observations: 0
-    Variables: 0
+    Observations: 70,000
+    Variables: 43
+    $ n_imp            <chr> "1", "1", "1", "1", "1", "1", "1", "1", "1", "1…
+    $ study_id         <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, …
+    $ sex              <fct> F, F, M, M, F, M, M, M, M, F, M, F, F, F, M, M,…
+    $ age_start        <int> 44, 22, 34, 47, 36, 50, 42, 29, 27, 38, 48, 63,…
+    $ primary_dept     <fct> 021, 031, 039, 020, 015, 005, 026, 008, 005, 02…
+    $ ethnic_cat       <fct> NH White, NH White, NH White, NH White, NH Whit…
+    $ lang_cat         <fct> English, English, English, English, English, En…
+    $ race_cat         <fct> Black, Black, White, White, White, White, White…
+    $ fpl_cat          <fct> <=138% FPL, <=138% FPL, >138% FPL, <=138% FPL, …
+    $ age_cat          <fct> "[35,51)", "[19,35)", "[19,35)", "[35,51)", "[3…
+    $ elig_cervical    <fct> 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0,…
+    $ elig_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,…
+    $ elig_colon       <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
+    $ elig_colonoscopy <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
+    $ elig_flexsig     <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
+    $ elig_fobt        <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
+    $ elig_bmi         <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+    $ elig_flu         <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
+    $ elig_chlam       <fct> 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
+    $ elig_smoking     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+    $ elig_cholest     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+    $ dmap_cervical    <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
+    $ dmap_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
+    $ dmap_colon       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ dmap_colonoscopy <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ dmap_flexsig     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ dmap_fobt        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ dmap_bmi         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,…
+    $ dmap_flu         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
+    $ dmap_chlam       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
+    $ dmap_smoking     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ dmap_cholest     <fct> 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1,…
+    $ ehr_cervical     <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_breast       <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_colon        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_colonoscopy  <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_flexsig      <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_fobt         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_bmi          <fct> 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0,…
+    $ ehr_flu          <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
+    $ ehr_chlam        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+    $ ehr_smoking      <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+    $ ehr_cholest      <fct> 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,…
 
 ``` r
 # dim(output)
@@ -1799,8 +1834,6 @@ written function because it’s a little bit of work to do this.
 source(here::here("src", "make_df_long.R"))
 output_long <- make_df_long(df = output)
 ```
-
-    Error in is_string(x): object 'elig_cervical' not found
 
 We can check that this works by grouping by category and checking that
 the sums and counts of some of the variables match.
@@ -1818,7 +1851,16 @@ output_long %>%
   )
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_long' not found
+    # A tibble: 7 x 7
+      cat            n   ELIG    EHR  DMAP         id      age
+      <chr>      <int>  <dbl>  <dbl> <dbl>      <dbl>    <int>
+    1 age       770000 409795 208525 84905 5390385000 32458360
+    2 all       770000 409795 208525 84905 5390385000 32458360
+    3 ethnicity 770000 409795 208525 84905 5390385000 32458360
+    4 fpl       770000 409795 208525 84905 5390385000 32458360
+    5 language  770000 409795 208525 84905 5390385000 32458360
+    6 race      770000 409795 208525 84905 5390385000 32458360
+    7 sex       770000 409795 208525 84905 5390385000 32458360
 
 I now want the data to be grouped by (1) procedure, (2) category, (3)
 level, and (4) imputation number.
@@ -1826,17 +1868,25 @@ level, and (4) imputation number.
 ``` r
 output_nested <- output_long %>% 
   group_by(proc, cat, level, n_imp) %>% 
-  nest()
-```
+  tidyr::nest()
 
-    Error in eval(lhs, parent, parent): object 'output_long' not found
-
-``` r
 output_nested %>% 
   head(., n = 10)
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    # A tibble: 10 x 5
+       proc     cat   level n_imp data                 
+       <chr>    <chr> <chr> <chr> <list>               
+     1 cervical all   all   1     <tibble [14,000 × 6]>
+     2 cervical all   all   2     <tibble [14,000 × 6]>
+     3 cervical all   all   3     <tibble [14,000 × 6]>
+     4 cervical all   all   4     <tibble [14,000 × 6]>
+     5 cervical all   all   5     <tibble [14,000 × 6]>
+     6 breast   all   all   1     <tibble [14,000 × 6]>
+     7 breast   all   all   2     <tibble [14,000 × 6]>
+     8 breast   all   all   3     <tibble [14,000 × 6]>
+     9 breast   all   all   4     <tibble [14,000 × 6]>
+    10 breast   all   all   5     <tibble [14,000 × 6]>
 
 ``` r
 # df_nested$data[[1]]
@@ -1851,19 +1901,27 @@ make the process automated and efficient.
 
 ``` r
 source(here::here("src", "calc-stats.R"))
-output_nested %<>% 
+output_nested <- output_nested %>% 
   mutate(Q = purrr::map(.x = data, .f = calc_stats_p), 
          U = purrr::map(.x = data, .f = calc_stats_se))
-```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
-
-``` r
 output_nested %>% 
   head(., n = 10)
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    # A tibble: 10 x 7
+       proc     cat   level n_imp data              Q             U            
+       <chr>    <chr> <chr> <chr> <list>            <list>        <list>       
+     1 cervical all   all   1     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     2 cervical all   all   2     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     3 cervical all   all   3     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     4 cervical all   all   4     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     5 cervical all   all   5     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     6 breast   all   all   1     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     7 breast   all   all   2     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     8 breast   all   all   3     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+     9 breast   all   all   4     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+    10 breast   all   all   5     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
 
 ``` r
 # output_nested$Q[[1]]
@@ -1874,61 +1932,79 @@ Next, we want to unnest the results from calculating the statistics and
 the standard errors.
 
 ``` r
-output_nested %<>% 
+output_nested <- output_nested %>% 
   tidyr::unnest(Q, U) %>% 
   dplyr::select(-stat1) %>% 
   mutate_at(.vars = vars(Q, U), 
             .funs = funs(as.numeric))
-```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
-
-``` r
 output_nested %>% 
   head(., n = 10)
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    # A tibble: 10 x 7
+       proc     cat   level n_imp stat            Q     U
+       <chr>    <chr> <chr> <chr> <chr>       <dbl> <dbl>
+     1 cervical all   all   1     n       14000         0
+     2 cervical all   all   1     a         844         0
+     3 cervical all   all   1     b        1980         0
+     4 cervical all   all   1     c        1893         0
+     5 cervical all   all   1     d        9283         0
+     6 cervical all   all   1     EHR.n    2824         0
+     7 cervical all   all   1     EHR.p       0.202     0
+     8 cervical all   all   1     DMAP.n   2737         0
+     9 cervical all   all   1     DMAP.p      0.196     0
+    10 cervical all   all   1     Combo.n  4717         0
 
 We want to re-`group_by` the data by procedure, category, level, and
 type of statistic. This step gives us the nested estimates and variances
 for all the imputed sets which we can now pool the resuls.
 
 ``` r
-output_nested %<>% 
+output_nested <- output_nested %>% 
   group_by(proc, cat, level, stat) %>% 
-  nest()
+  tidyr::nest()
 ```
-
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
 
 Pool and unnest. Note that my user written function `mi_pool` is really
 just a wrapper for the `pool.scalar()` function in the `mice` package.
 
 ``` r
-output_nested %<>% 
+output_nested <- output_nested %>% 
   mutate(pooled = purrr::map(.x = data, .f = mi_pool))
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    Error in mice::pool.scalar(Q, U, method = "rubin"): unused argument (method = "rubin")
 
 ``` r
 output_nested %>% 
   head(., n = 10)
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    # A tibble: 10 x 5
+       proc     cat   level stat    data            
+       <chr>    <chr> <chr> <chr>   <list>          
+     1 cervical all   all   n       <tibble [5 × 3]>
+     2 cervical all   all   a       <tibble [5 × 3]>
+     3 cervical all   all   b       <tibble [5 × 3]>
+     4 cervical all   all   c       <tibble [5 × 3]>
+     5 cervical all   all   d       <tibble [5 × 3]>
+     6 cervical all   all   EHR.n   <tibble [5 × 3]>
+     7 cervical all   all   EHR.p   <tibble [5 × 3]>
+     8 cervical all   all   DMAP.n  <tibble [5 × 3]>
+     9 cervical all   all   DMAP.p  <tibble [5 × 3]>
+    10 cervical all   all   Combo.n <tibble [5 × 3]>
 
 Unnest the pooled results, we see that for each procedure, by category,
 by strata, we have for each statistic, the results that the pooling in
 `mice` provides.
 
 ``` r
-output_nested %<>% 
-  unnest(pooled)
+output_nested <- output_nested %>% 
+  tidyr::unnest(pooled)
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    Error: object 'pooled' not found
 
 ``` r
 output_nested %>% 
@@ -1936,7 +2012,12 @@ output_nested %>%
   dplyr::glimpse(.)
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    Observations: 4,807
+    Variables: 4
+    $ proc  <chr> "cervical", "cervical", "cervical", "cervical", "cervical"…
+    $ cat   <chr> "all", "all", "all", "all", "all", "all", "all", "all", "a…
+    $ level <chr> "all", "all", "all", "all", "all", "all", "all", "all", "a…
+    $ stat  <chr> "n", "a", "b", "c", "d", "EHR.n", "EHR.p", "DMAP.n", "DMAP…
 
 The value `qbar` is the pooled post-imputation estimate that we are most
 interested. See the `mice` documenation for information on the rest. So
@@ -1964,7 +2045,7 @@ output_nested %>%
   )
 ```
 
-    Error in eval(lhs, parent, parent): object 'output_nested' not found
+    Error in .f(.x[[i]], ...): object 'qbar' not found
 
 Well, the procedures and the categories need should be arranged
 differently for formal presentation. But that’s pretty straightforward
@@ -1984,4 +2065,4 @@ lubridate::as.period(
   )
 ```
 
-    [1] "41.8220419883728S"
+    [1] "5M 0.0119600296020508S"

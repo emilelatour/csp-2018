@@ -500,10 +500,11 @@ init$visitSequence
 I override this with the following to order things as: FPL -> Race -> Ethnicity
 
 ```{r}
-visit_order <- c(init$visitSequence[["fpl_cat"]], 
-                 init$visitSequence[["race_cat"]], 
-                 init$visitSequence[["ethnic_cat"]])
+visit_order <- c("fpl_cat",  
+                 "race_cat", 
+                 "ethnic_cat")
 visit_order
+
 ```
 
 ### Step 6 - Decide the number of iterations
@@ -626,7 +627,7 @@ I now want the data to be grouped by (1) procedure, (2) category, (3) level, and
 ```{r}
 output_nested <- output_long %>% 
   group_by(proc, cat, level, n_imp) %>% 
-  nest()
+  tidyr::nest()
 
 output_nested %>% 
   head(., n = 10)
@@ -641,7 +642,7 @@ We now have a nested column of the data by the groups and imputations that we wa
 ```{r, warning=FALSE}
 
 source(here::here("src", "calc-stats.R"))
-output_nested %<>% 
+output_nested <- output_nested %>% 
   mutate(Q = purrr::map(.x = data, .f = calc_stats_p), 
          U = purrr::map(.x = data, .f = calc_stats_se))
 
@@ -655,7 +656,7 @@ Next, we want to unnest the results from calculating the statistics and the stan
 
 ```{r, warning=FALSE}
 
-output_nested %<>% 
+output_nested <- output_nested %>% 
   tidyr::unnest(Q, U) %>% 
   dplyr::select(-stat1) %>% 
   mutate_at(.vars = vars(Q, U), 
@@ -668,9 +669,9 @@ output_nested %>%
 We want to re-`group_by` the data by procedure, category, level, and type of statistic. This step gives us the nested estimates and variances for all the imputed sets which we can now pool the resuls.
 
 ```{r, wearning=FALSE}
-output_nested %<>% 
+output_nested <- output_nested %>% 
   group_by(proc, cat, level, stat) %>% 
-  nest()
+  tidyr::nest()
 
 
 ```
@@ -678,7 +679,7 @@ output_nested %<>%
 Pool and unnest. Note that my user written function `mi_pool` is really just a wrapper for the `pool.scalar()` function in the `mice` package.
 
 ```{r, warning=FALSE}
-output_nested %<>% 
+output_nested <- output_nested %>% 
   mutate(pooled = purrr::map(.x = data, .f = mi_pool))
 
 output_nested %>% 
@@ -689,8 +690,8 @@ output_nested %>%
 Unnest the pooled results, we see that for each procedure, by category, by strata, we have for each statistic, the results that the pooling in `mice` provides.
 
 ```{r}
-output_nested %<>% 
-  unnest(pooled)
+output_nested <- output_nested %>% 
+  tidyr::unnest(pooled)
 
 output_nested %>% 
   dplyr::select(-data) %>% 
