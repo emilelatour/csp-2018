@@ -1,9 +1,12 @@
 ---
-title: "Example of work to impute, analyze, and pool agreement statistics"
-author: "Emile Latour"
-date: '`r Sys.Date()`'
-output: github_document
+always_allow_html: yes
+output:
+  md_document:
+    variant: markdown_github
+    
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r setup, include=FALSE}
 
@@ -67,7 +70,7 @@ pacman::p_load(
   rlang,         # For use in tidyevaluation
   readxl,        # read in excel files
   writexl,       # write excel files, zero dependency
-  xlsx,          # read, write, format Excel files
+  # xlsx,          # read, write, format Excel files
   janitor,       # for working with dirty data
   lubridate,     # for working with dates and times
   stringr,       # handy string operations
@@ -93,6 +96,20 @@ start_time <- Sys.time()
 here::here()
 
 ```
+
+
+# Overview
+
+The repository shows example code that I used to 
+
++ Make a simulated data set, 
++ Examine the missingness, 
++ Specify the imputation model,
++ Pefrom multiple impuation with the `mice` package, 
++ Calculate a number of agreement statistics, and
++ Pool the results with `mice`.
+
+Also included are the slides from my presentation at CSP (2018) my final submitted thesis (2019-06-29).
 
 
 # Simulate a data set
@@ -179,7 +196,7 @@ naniar::vis_miss(valdata)
 We can also get a numeric percent missing for the variables.
 
 ```{r}
-miss_var_summary(valdata) %>% 
+naniar::miss_var_summary(valdata) %>% 
   head(., n = 10)
 ```
 
@@ -232,7 +249,7 @@ mssng_pattern <- valdata %>%
                 num_available = V4)
 
 mssng_pattern %>% 
-  kable(.)
+  knitr::kable(.)
 ```
 
 See Stef Van Buuren's vignette for more in depth interpretation of the table above. There's a lot of good info there. How I interpret it is to pay attention to the 1's and 0's in the main body of the table. They correspond to what is observed (1) and missing (0) for the variables listed in the top row.
@@ -244,7 +261,7 @@ The `naniar` package has summary that is a little simpler and gives some of the 
 ```{r}
 valdata %>% 
   naniar::miss_case_table(.) %>% 
-  kable(.)
+  knitr::kable(.)
 ```
 
 
@@ -292,7 +309,7 @@ More recent advice on how many imputations to perform suggests a rule of thumb t
 An incomplete case would be an observation (or row) with at least one missing value. There are a number of ways to get at this information, but the `naniar` package makes it super easy.
 
 ```{r}
-n_missing <- naniar::miss_case_prop(valdata)
+n_missing <- naniar::prop_miss_case(valdata)
 n_missing
 ```
 
