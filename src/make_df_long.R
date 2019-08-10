@@ -39,7 +39,7 @@ make_df_long <- function(df) {
                   value = value)
   
   # Gather the categories
-  df_long %<>% 
+  df_long <- df_long %>% 
     tidyr::gather(data = ., 
                   key = "cat", 
                   value = "level", 
@@ -56,7 +56,7 @@ make_df_long <- function(df) {
   
   # Pick one category and dummy the category and the levels
   # And bind the all back to the long data
-  df_long %<>% 
+  df_long <- df_long %>% 
     dplyr::filter(cat == "sex") %>% 
     mutate(cat = "all", 
            level = "all") %>% 

@@ -118,7 +118,7 @@ make_sim_data <- function(n_rows, seed) {
   b <- a
   c <- size - a - b
   
-  valdata %<>% 
+  valdata <- valdata %>% 
     mutate(
       study_id = seq(1:size), 
       sex = make_factor(levels = c("F", "M"), 
@@ -172,7 +172,7 @@ make_sim_data <- function(n_rows, seed) {
     factor(var, levels = c("1", "0"))
   }
   
-  valdata %<>% 
+  valdata <- valdata %>% 
     mutate(
       elig_cervical = 
         ifelse(sex == "F" & age_start >= 19 & age_start <= 64, 1, 0), 
