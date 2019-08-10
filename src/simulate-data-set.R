@@ -83,7 +83,7 @@ make_sim_data <- function(n_rows, seed) {
   
   ## Create tibble with NA's ----------------
   
-  valdata <- tibble::as.tibble(matrix(NA, 
+  valdata <- tibble::as_tibble(matrix(NA, 
                                       nrow = size, 
                                       ncol = length(var_names)))
   names(valdata) <- var_names
@@ -195,7 +195,7 @@ make_sim_data <- function(n_rows, seed) {
       elig_cholest = 
         ifelse(age_start >= 20, 1, 0)) %>% 
     mutate_at(.vars = vars(elig_cervical:elig_cholest), 
-              .funs = funs(make_factor2))
+              .funs = list(~ make_factor2(.)))
   
   
   #### Make factor screening variables --------------------------------
