@@ -321,7 +321,12 @@ mi_pool <- function(df) {
   Q <- df[["Q"]]
   U <- df[["U"]]
   
-  mice::pool.scalar(Q, U, method = "rubin") %>%    # Rubin 1987
+  # mice::pool.scalar(Q, U, method = "rubin") %>%    # Rubin 1987
+  #   as.data.frame(.) %>% 
+  #   dplyr::select(-qhat, -u) %>% 
+  #   dplyr::slice(1) 
+  
+  mice::pool.scalar(Q, U) %>%    # Rubin 1987
     as.data.frame(.) %>% 
     dplyr::select(-qhat, -u) %>% 
     dplyr::slice(1) 

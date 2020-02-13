@@ -100,8 +100,6 @@ here::here()
 
 # Overview
 
-Testing small change.
-
 The repository shows example code that I used to 
 
 + Make a simulated data set, 
@@ -157,19 +155,22 @@ tab1 <- tableone::CreateTableOne(
   factorVars = 
     c("sex", "race_cat", "ethnic_cat", "lang_cat", "fpl_cat", "age_cat"), 
   includeNA = TRUE
-)
-
-#### print_table_one --------------------------------
-# A helper function to print the table one object to my preference.
-
-print_table_one <- . %>% 
+) %>% 
   print(., 
         showAllLevels = TRUE, 
         printToggle = FALSE, 
         noSpaces = TRUE
-        ) %>% 
-  as.data.frame(.) %>% 
+        ) 
+
+#### Print table one --------------------------------
+
+tab1 %>% 
+  as.data.frame() %>% 
   tibble::rownames_to_column(., var = "rowname") %>% 
+  tibble::as_tibble() %>% 
+  mutate(rowname = rownames(tab1)) %>% 
+  mutate(level = as.character(level), 
+         level = tidyr::replace_na(level, "(Missing)")) %>% 
   knitr::kable(booktabs = TRUE, 
                longtable = TRUE, 
                col.names = c("", names(.)[-1])) %>% 
@@ -177,10 +178,6 @@ print_table_one <- . %>%
                             latex_options = c("repeat_header")) %>% 
   kableExtra::column_spec(1, width = "10em")
 
-#### Print table one --------------------------------
-
-tab1 %>% 
-  print_table_one
 ```
 
 ## Visualizing missingness in the data set
@@ -239,7 +236,7 @@ valdata %>%
 
 ## Numerical summaries
 
-```{r}
+```{r, fig.width=8}
 mssng_pattern <- valdata %>% 
   dplyr::select(race_cat, ethnic_cat, fpl_cat) %>% 
   mice::md.pattern(.) %>% 
@@ -251,7 +248,7 @@ mssng_pattern <- valdata %>%
                 num_available = V4)
 
 mssng_pattern %>% 
-  knitr::kable(.)
+  knitr::kable(., escape = FALSE)
 ```
 
 See Stef Van Buuren's vignette for more in depth interpretation of the table above. There's a lot of good info there. How I interpret it is to pay attention to the 1's and 0's in the main body of the table. They correspond to what is observed (1) and missing (0) for the variables listed in the top row.
@@ -324,9 +321,9 @@ Below I show some of the set up that I went through to perform the multiple impu
 
 + the [`mice` package documentation](https://cran.r-project.org/web/packages/mice/mice.pdf)
 + the [vignette](https://www.jstatsoft.org/article/view/v045i03/v45i03.pdf) from the Journal of Statistical Software (December 2011, Volume 45, Issue 3)
-+ [Flexible Imputation of Missing Data](https://www.crcpress.com/Flexible-Imputation-of-Missing-Data/van-Buuren/p/book/9781439868249) by Stef van Buuren
++ [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/) by Stef van Buuren
 
-Also, since my work was done, [online resources](https://cran.r-project.org/web/packages/mice/vignettes/resources.html) have been added.
+Also, since my work was done, [online resources](https://stefvanbuuren.name/mice/) and [github info](https://github.com/stefvanbuuren/mice) have been added.
 
 For more information about MICE: Multivariate Imputation by Chained Equations, sometimes called Fully Conditional Specification, I highly recommend any of the materials (code or books) or published papers by Stef van Buuren. Much can be found through his website, [www.multiple-imputation.com](http://www.stefvanbuuren.nl/mi/).
 
@@ -659,10 +656,9 @@ Next, we want to unnest the results from calculating the statistics and the stan
 ```{r, warning=FALSE}
 
 output_nested <- output_nested %>% 
-  tidyr::unnest(Q, U) %>% 
-  dplyr::select(-stat1) %>% 
+  tidyr::unnest(c(Q, U)) %>% 
   mutate_at(.vars = vars(Q, U), 
-            .funs = funs(as.numeric))
+            .funs = list(~ as.numeric(.)))
 
 output_nested %>% 
   head(., n = 10)
@@ -682,7 +678,8 @@ Pool and unnest. Note that my user written function `mi_pool` is really just a w
 
 ```{r, warning=FALSE}
 output_nested <- output_nested %>% 
-  mutate(pooled = purrr::map(.x = data, .f = mi_pool))
+  mutate(pooled = purrr::map(.x = data, 
+                             .f = ~ mi_pool(.x)))
 
 output_nested %>% 
   head(., n = 10)

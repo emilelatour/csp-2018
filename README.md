@@ -2,8 +2,6 @@
 Overview
 ========
 
-Testing small change.
-
 The repository shows example code that I used to
 
 -   Make a simulated data set,
@@ -117,30 +115,28 @@ tab1 <- tableone::CreateTableOne(
   factorVars = 
     c("sex", "race_cat", "ethnic_cat", "lang_cat", "fpl_cat", "age_cat"), 
   includeNA = TRUE
-)
-
-#### print_table_one --------------------------------
-# A helper function to print the table one object to my preference.
-
-print_table_one <- . %>% 
+) %>% 
   print(., 
         showAllLevels = TRUE, 
         printToggle = FALSE, 
         noSpaces = TRUE
-        ) %>% 
-  as.data.frame(.) %>% 
+        ) 
+
+#### Print table one --------------------------------
+
+tab1 %>% 
+  as.data.frame() %>% 
   tibble::rownames_to_column(., var = "rowname") %>% 
+  tibble::as_tibble() %>% 
+  mutate(rowname = rownames(tab1)) %>% 
+  mutate(level = as.character(level), 
+         level = tidyr::replace_na(level, "(Missing)")) %>% 
   knitr::kable(booktabs = TRUE, 
                longtable = TRUE, 
                col.names = c("", names(.)[-1])) %>% 
   kableExtra::kable_styling(full_width = FALSE, 
                             latex_options = c("repeat_header")) %>% 
   kableExtra::column_spec(1, width = "10em")
-
-#### Print table one --------------------------------
-
-tab1 %>% 
-  print_table_one
 ```
 
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -169,7 +165,7 @@ n
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-sex….
+sex (%)
 </td>
 <td style="text-align:left;">
 F
@@ -180,7 +176,6 @@ F
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X
 </td>
 <td style="text-align:left;">
 M
@@ -191,7 +186,7 @@ M
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-race\_cat….
+race\_cat (%)
 </td>
 <td style="text-align:left;">
 AIAN
@@ -202,7 +197,6 @@ AIAN
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.1
 </td>
 <td style="text-align:left;">
 API
@@ -213,7 +207,6 @@ API
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.2
 </td>
 <td style="text-align:left;">
 Black
@@ -224,7 +217,6 @@ Black
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.3
 </td>
 <td style="text-align:left;">
 Multiple Races
@@ -235,7 +227,6 @@ Multiple Races
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.4
 </td>
 <td style="text-align:left;">
 White
@@ -246,10 +237,9 @@ White
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.5
 </td>
 <td style="text-align:left;">
-NA
+(Missing)
 </td>
 <td style="text-align:left;">
 993 (7.1)
@@ -257,7 +247,7 @@ NA
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-ethnic\_cat….
+ethnic\_cat (%)
 </td>
 <td style="text-align:left;">
 Hispanic
@@ -268,7 +258,6 @@ Hispanic
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.6
 </td>
 <td style="text-align:left;">
 NH Other
@@ -279,7 +268,6 @@ NH Other
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.7
 </td>
 <td style="text-align:left;">
 NH White
@@ -290,10 +278,9 @@ NH White
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.8
 </td>
 <td style="text-align:left;">
-NA
+(Missing)
 </td>
 <td style="text-align:left;">
 711 (5.1)
@@ -301,7 +288,7 @@ NA
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-lang\_cat….
+lang\_cat (%)
 </td>
 <td style="text-align:left;">
 English
@@ -312,7 +299,6 @@ English
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.9
 </td>
 <td style="text-align:left;">
 Other
@@ -323,7 +309,6 @@ Other
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.10
 </td>
 <td style="text-align:left;">
 Spanish
@@ -334,7 +319,7 @@ Spanish
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-fpl\_cat….
+fpl\_cat (%)
 </td>
 <td style="text-align:left;">
 &lt;=138% FPL
@@ -345,7 +330,6 @@ fpl\_cat….
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.11
 </td>
 <td style="text-align:left;">
 &gt;138% FPL
@@ -356,10 +340,9 @@ X.11
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.12
 </td>
 <td style="text-align:left;">
-NA
+(Missing)
 </td>
 <td style="text-align:left;">
 2828 (20.2)
@@ -367,7 +350,7 @@ NA
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-age\_cat….
+age\_cat (%)
 </td>
 <td style="text-align:left;">
 \[19,35)
@@ -378,7 +361,6 @@ age\_cat….
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.13
 </td>
 <td style="text-align:left;">
 \[35,51)
@@ -389,7 +371,6 @@ X.13
 </tr>
 <tr>
 <td style="text-align:left;width: 10em; ">
-X.14
 </td>
 <td style="text-align:left;">
 \[51,65)
@@ -518,7 +499,7 @@ mssng_pattern <- valdata %>%
 
 ``` r
 mssng_pattern %>% 
-  knitr::kable(.)
+  knitr::kable(., escape = FALSE)
 ```
 
 <table>
@@ -891,12 +872,11 @@ absolutely indispensable in my set up and learning:
     from the Journal of Statistical Software (December 2011, Volume 45,
     Issue 3)
 -   [Flexible Imputation of Missing
-    Data](https://www.crcpress.com/Flexible-Imputation-of-Missing-Data/van-Buuren/p/book/9781439868249)
-    by Stef van Buuren
+    Data](https://stefvanbuuren.name/fimd/) by Stef van Buuren
 
 Also, since my work was done, [online
-resources](https://cran.r-project.org/web/packages/mice/vignettes/resources.html)
-have been added.
+resources](https://stefvanbuuren.name/mice/) and [github
+info](https://github.com/stefvanbuuren/mice) have been added.
 
 For more information about MICE: Multivariate Imputation by Chained
 Equations, sometimes called Fully Conditional Specification, I highly
@@ -1664,7 +1644,7 @@ imp_full <-
 ```
 
        user  system elapsed 
-    220.891  10.238 232.125 
+    229.679  10.563 243.362 
 
 That’s elapsed time in seconds.
 
@@ -1890,29 +1870,33 @@ the standard errors.
 
 ``` r
 output_nested <- output_nested %>% 
-  tidyr::unnest(Q, U) %>% 
-  dplyr::select(-stat1) %>% 
+  tidyr::unnest(c(Q, U)) %>% 
   mutate_at(.vars = vars(Q, U), 
-            .funs = funs(as.numeric))
+            .funs = list(~ as.numeric(.)))
+```
 
+    Error: Column name `stat` must not be duplicated.
+    Use .name_repair to specify repair.
+
+``` r
 output_nested %>% 
   head(., n = 10)
 ```
 
-    # A tibble: 10 x 8
-    # Groups:   n_imp, proc, cat, level [1]
-       n_imp proc     cat   level data                  stat            Q     U
-       <chr> <chr>    <chr> <chr> <list>                <chr>       <dbl> <dbl>
-     1 1     cervical all   all   <tibble [14,000 × 6]> n       14000         0
-     2 1     cervical all   all   <tibble [14,000 × 6]> a         844         0
-     3 1     cervical all   all   <tibble [14,000 × 6]> b        1980         0
-     4 1     cervical all   all   <tibble [14,000 × 6]> c        1893         0
-     5 1     cervical all   all   <tibble [14,000 × 6]> d        9283         0
-     6 1     cervical all   all   <tibble [14,000 × 6]> EHR.n    2824         0
-     7 1     cervical all   all   <tibble [14,000 × 6]> EHR.p       0.202     0
-     8 1     cervical all   all   <tibble [14,000 × 6]> DMAP.n   2737         0
-     9 1     cervical all   all   <tibble [14,000 × 6]> DMAP.p      0.196     0
-    10 1     cervical all   all   <tibble [14,000 × 6]> Combo.n  4717         0
+    # A tibble: 10 x 7
+    # Groups:   n_imp, proc, cat, level [10]
+       n_imp proc     cat   level data               Q               U              
+       <chr> <chr>    <chr> <chr> <list>             <list>          <list>         
+     1 1     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     2 2     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     3 3     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     4 4     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     5 5     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     6 1     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     7 2     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     8 3     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     9 4     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+    10 5     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
 
 We want to re-`group_by` the data by procedure, category, level, and
 type of statistic. This step gives us the nested estimates and variances
@@ -1924,35 +1908,38 @@ output_nested <- output_nested %>%
   tidyr::nest()
 ```
 
+    Error: Column `stat` is unknown
+
 Pool and unnest. Note that my user written function `mi_pool` is really
 just a wrapper for the `pool.scalar()` function in the `mice` package.
 
 ``` r
 output_nested <- output_nested %>% 
-  mutate(pooled = purrr::map(.x = data, .f = mi_pool))
+  mutate(pooled = purrr::map(.x = data, 
+                             .f = ~ mi_pool(.x)))
 ```
 
-    Error in mice::pool.scalar(Q, U, method = "rubin"): unused argument (method = "rubin")
+    Error in var(Q): 'x' is NULL
 
 ``` r
 output_nested %>% 
   head(., n = 10)
 ```
 
-    # A tibble: 10 x 5
-    # Groups:   proc, cat, level, stat [10]
-       proc     cat   level stat    data            
-       <chr>    <chr> <chr> <chr>   <list>          
-     1 cervical all   all   n       <tibble [5 × 4]>
-     2 cervical all   all   a       <tibble [5 × 4]>
-     3 cervical all   all   b       <tibble [5 × 4]>
-     4 cervical all   all   c       <tibble [5 × 4]>
-     5 cervical all   all   d       <tibble [5 × 4]>
-     6 cervical all   all   EHR.n   <tibble [5 × 4]>
-     7 cervical all   all   EHR.p   <tibble [5 × 4]>
-     8 cervical all   all   DMAP.n  <tibble [5 × 4]>
-     9 cervical all   all   DMAP.p  <tibble [5 × 4]>
-    10 cervical all   all   Combo.n <tibble [5 × 4]>
+    # A tibble: 10 x 7
+    # Groups:   n_imp, proc, cat, level [10]
+       n_imp proc     cat   level data               Q               U              
+       <chr> <chr>    <chr> <chr> <list>             <list>          <list>         
+     1 1     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     2 2     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     3 3     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     4 4     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     5 5     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     6 1     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     7 2     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     8 3     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     9 4     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+    10 5     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
 
 Unnest the pooled results, we see that for each procedure, by category,
 by strata, we have for each statistic, the results that the pooling in
@@ -1972,13 +1959,15 @@ output_nested %>%
   dplyr::glimpse(.)
 ```
 
-    Observations: 4,807
-    Variables: 4
-    Groups: proc, cat, level, stat [4,807]
-    $ proc  <chr> "cervical", "cervical", "cervical", "cervical", "cervical", "ce…
+    Observations: 1,045
+    Variables: 6
+    Groups: n_imp, proc, cat, level [1,045]
+    $ n_imp <chr> "1", "2", "3", "4", "5", "1", "2", "3", "4", "5", "1", "2", "3"…
+    $ proc  <chr> "cervical", "cervical", "cervical", "cervical", "cervical", "br…
     $ cat   <chr> "all", "all", "all", "all", "all", "all", "all", "all", "all", …
     $ level <chr> "all", "all", "all", "all", "all", "all", "all", "all", "all", …
-    $ stat  <chr> "n", "a", "b", "c", "d", "EHR.n", "EHR.p", "DMAP.n", "DMAP.p", …
+    $ Q     <list> [<data.frame[23 x 2]>, <data.frame[23 x 2]>, <data.frame[23 x …
+    $ U     <list> [<data.frame[23 x 2]>, <data.frame[23 x 2]>, <data.frame[23 x …
 
 The value `qbar` is the pooled post-imputation estimate that we are most
 interested. See the `mice` documenation for information on the rest. So
@@ -2006,8 +1995,8 @@ output_nested %>%
   )
 ```
 
-    Error: Can't subset columns that don't exist.
-    [31mx[39m The column `qbar` doesn't exist.
+    Error: This tidyselect interface doesn't support predicates yet.
+    ℹ Contact the package author and suggest using `eval_select()`.
 
 Well, the procedures and the categories need should be arranged
 differently for formal presentation. But that’s pretty straightforward
@@ -2027,4 +2016,4 @@ lubridate::as.period(
   )
 ```
 
-    [1] "4M 54.0344290733337S"
+    [1] "5M 5.79863500595093S"
