@@ -2,6 +2,8 @@
 Overview
 ========
 
+Testing small change.
+
 The repository shows example code that I used to
 
 -   Make a simulated data set,
@@ -54,48 +56,48 @@ dplyr::glimpse(valdata)
 
     Observations: 14,000
     Variables: 42
-    $ study_id         <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, …
-    $ sex              <fct> F, F, M, M, F, M, M, M, M, F, M, F, F, F, M, M,…
-    $ age_start        <int> 44, 22, 34, 47, 36, 50, 42, 29, 27, 38, 48, 63,…
-    $ primary_dept     <fct> 021, 031, 039, 020, 015, 005, 026, 008, 005, 02…
-    $ ethnic_cat       <fct> NH White, NH White, NH White, NH White, NH Whit…
-    $ lang_cat         <fct> English, English, English, English, English, En…
-    $ race_cat         <fct> Black, Black, White, White, White, White, White…
-    $ fpl_cat          <fct> <=138% FPL, <=138% FPL, >138% FPL, <=138% FPL, …
-    $ age_cat          <fct> "[35,51)", "[19,35)", "[19,35)", "[35,51)", "[3…
-    $ elig_cervical    <fct> 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0,…
-    $ elig_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,…
-    $ elig_colon       <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_colonoscopy <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_flexsig     <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_fobt        <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_bmi         <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ elig_flu         <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_chlam       <fct> 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
-    $ elig_smoking     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ elig_cholest     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ dmap_cervical    <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
-    $ dmap_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
-    $ dmap_colon       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_colonoscopy <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_flexsig     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_fobt        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_bmi         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_flu         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-    $ dmap_chlam       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
-    $ dmap_smoking     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_cholest     <fct> 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1,…
-    $ ehr_cervical     <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_breast       <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_colon        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_colonoscopy  <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_flexsig      <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_fobt         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_bmi          <fct> 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0,…
-    $ ehr_flu          <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-    $ ehr_chlam        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_smoking      <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ ehr_cholest      <fct> 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,…
+    $ study_id         <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1…
+    $ sex              <fct> F, F, M, M, F, M, M, M, M, F, M, F, F, F, M, M, M, F…
+    $ age_start        <int> 44, 22, 34, 47, 36, 50, 42, 29, 27, 38, 48, 63, 42, …
+    $ primary_dept     <fct> 021, 031, 039, 020, 015, 005, 026, 008, 005, 024, 03…
+    $ ethnic_cat       <fct> NH White, NH White, NH White, NH White, NH White, NH…
+    $ lang_cat         <fct> English, English, English, English, English, English…
+    $ race_cat         <fct> Black, Black, White, White, White, White, White, Whi…
+    $ fpl_cat          <fct> <=138% FPL, <=138% FPL, >138% FPL, <=138% FPL, <=138…
+    $ age_cat          <fct> "[35,51)", "[19,35)", "[19,35)", "[35,51)", "[35,51)…
+    $ elig_cervical    <fct> 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1…
+    $ elig_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1…
+    $ elig_colon       <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_colonoscopy <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_flexsig     <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_fobt        <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_bmi         <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ elig_flu         <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_chlam       <fct> 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
+    $ elig_smoking     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ elig_cholest     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ dmap_cervical    <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
+    $ dmap_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1…
+    $ dmap_colon       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_colonoscopy <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_flexsig     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_fobt        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1…
+    $ dmap_bmi         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_flu         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0…
+    $ dmap_chlam       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
+    $ dmap_smoking     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_cholest     <fct> 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0…
+    $ ehr_cervical     <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_breast       <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_colon        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1…
+    $ ehr_colonoscopy  <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_flexsig      <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_fobt         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_bmi          <fct> 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1…
+    $ ehr_flu          <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1…
+    $ ehr_chlam        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_smoking      <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ ehr_cholest      <fct> 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0…
 
 EDA / explore missingness
 =========================
@@ -872,9 +874,8 @@ n_missing
 
     [1] 0.2957857
 
-So we know that in the data set 29.6% of observations have missing
-values. I round this up to 30 to select the number of imputations to
-perform.
+So we know that in the data set 30% of observations have missing values.
+I round this up to 30 to select the number of imputations to perform.
 
 Imputation
 ==========
@@ -1037,350 +1038,307 @@ predM[rowSums(predM) > 0, ]
     ehr_chlam               1   1         1            1          1        1
     ehr_smoking             1   1         1            1          1        1
     ehr_cholest             1   1         1            1          1        1
-                     race_cat fpl_cat age_cat elig_cervical elig_breast
-    study_id                1       1       1             0           1
-    sex                     1       1       1             0           1
-    age_start               1       1       1             0           1
-    primary_dept            1       1       1             0           1
-    ethnic_cat              1       1       1             0           1
-    lang_cat                1       1       1             0           1
-    race_cat                0       1       1             0           1
-    fpl_cat                 1       0       1             0           1
-    age_cat                 1       1       0             0           1
-    elig_cervical           1       1       1             0           1
-    elig_breast             1       1       1             0           0
-    elig_colon              1       1       1             0           1
-    elig_colonoscopy        1       1       1             0           1
-    elig_flexsig            1       1       1             0           1
-    elig_fobt               1       1       1             0           1
-    elig_bmi                1       1       1             0           1
-    elig_flu                1       1       1             0           1
-    elig_chlam              1       1       1             0           1
-    elig_smoking            1       1       1             0           1
-    elig_cholest            1       1       1             0           1
-    dmap_cervical           1       1       1             0           1
-    dmap_breast             1       1       1             0           1
-    dmap_colon              1       1       1             0           1
-    dmap_colonoscopy        1       1       1             0           1
-    dmap_flexsig            1       1       1             0           1
-    dmap_fobt               1       1       1             0           1
-    dmap_bmi                1       1       1             0           1
-    dmap_flu                1       1       1             0           1
-    dmap_chlam              1       1       1             0           1
-    dmap_smoking            1       1       1             0           1
-    dmap_cholest            1       1       1             0           1
-    ehr_cervical            1       1       1             0           1
-    ehr_breast              1       1       1             0           1
-    ehr_colon               1       1       1             0           1
-    ehr_colonoscopy         1       1       1             0           1
-    ehr_flexsig             1       1       1             0           1
-    ehr_fobt                1       1       1             0           1
-    ehr_bmi                 1       1       1             0           1
-    ehr_flu                 1       1       1             0           1
-    ehr_chlam               1       1       1             0           1
-    ehr_smoking             1       1       1             0           1
-    ehr_cholest             1       1       1             0           1
-                     elig_colon elig_colonoscopy elig_flexsig elig_fobt
-    study_id                  1                0            0         0
-    sex                       1                0            0         0
-    age_start                 1                0            0         0
-    primary_dept              1                0            0         0
-    ethnic_cat                1                0            0         0
-    lang_cat                  1                0            0         0
-    race_cat                  1                0            0         0
-    fpl_cat                   1                0            0         0
-    age_cat                   1                0            0         0
-    elig_cervical             1                0            0         0
-    elig_breast               1                0            0         0
-    elig_colon                0                0            0         0
-    elig_colonoscopy          1                0            0         0
-    elig_flexsig              1                0            0         0
-    elig_fobt                 1                0            0         0
-    elig_bmi                  1                0            0         0
-    elig_flu                  1                0            0         0
-    elig_chlam                1                0            0         0
-    elig_smoking              1                0            0         0
-    elig_cholest              1                0            0         0
-    dmap_cervical             1                0            0         0
-    dmap_breast               1                0            0         0
-    dmap_colon                1                0            0         0
-    dmap_colonoscopy          1                0            0         0
-    dmap_flexsig              1                0            0         0
-    dmap_fobt                 1                0            0         0
-    dmap_bmi                  1                0            0         0
-    dmap_flu                  1                0            0         0
-    dmap_chlam                1                0            0         0
-    dmap_smoking              1                0            0         0
-    dmap_cholest              1                0            0         0
-    ehr_cervical              1                0            0         0
-    ehr_breast                1                0            0         0
-    ehr_colon                 1                0            0         0
-    ehr_colonoscopy           1                0            0         0
-    ehr_flexsig               1                0            0         0
-    ehr_fobt                  1                0            0         0
-    ehr_bmi                   1                0            0         0
-    ehr_flu                   1                0            0         0
-    ehr_chlam                 1                0            0         0
-    ehr_smoking               1                0            0         0
-    ehr_cholest               1                0            0         0
-                     elig_bmi elig_flu elig_chlam elig_smoking elig_cholest
-    study_id                0        0          1            0            1
-    sex                     0        0          1            0            1
-    age_start               0        0          1            0            1
-    primary_dept            0        0          1            0            1
-    ethnic_cat              0        0          1            0            1
-    lang_cat                0        0          1            0            1
-    race_cat                0        0          1            0            1
-    fpl_cat                 0        0          1            0            1
-    age_cat                 0        0          1            0            1
-    elig_cervical           0        0          1            0            1
-    elig_breast             0        0          1            0            1
-    elig_colon              0        0          1            0            1
-    elig_colonoscopy        0        0          1            0            1
-    elig_flexsig            0        0          1            0            1
-    elig_fobt               0        0          1            0            1
-    elig_bmi                0        0          1            0            1
-    elig_flu                0        0          1            0            1
-    elig_chlam              0        0          0            0            1
-    elig_smoking            0        0          1            0            1
-    elig_cholest            0        0          1            0            0
-    dmap_cervical           0        0          1            0            1
-    dmap_breast             0        0          1            0            1
-    dmap_colon              0        0          1            0            1
-    dmap_colonoscopy        0        0          1            0            1
-    dmap_flexsig            0        0          1            0            1
-    dmap_fobt               0        0          1            0            1
-    dmap_bmi                0        0          1            0            1
-    dmap_flu                0        0          1            0            1
-    dmap_chlam              0        0          1            0            1
-    dmap_smoking            0        0          1            0            1
-    dmap_cholest            0        0          1            0            1
-    ehr_cervical            0        0          1            0            1
-    ehr_breast              0        0          1            0            1
-    ehr_colon               0        0          1            0            1
-    ehr_colonoscopy         0        0          1            0            1
-    ehr_flexsig             0        0          1            0            1
-    ehr_fobt                0        0          1            0            1
-    ehr_bmi                 0        0          1            0            1
-    ehr_flu                 0        0          1            0            1
-    ehr_chlam               0        0          1            0            1
-    ehr_smoking             0        0          1            0            1
-    ehr_cholest             0        0          1            0            1
-                     dmap_cervical dmap_breast dmap_colon dmap_colonoscopy
-    study_id                     1           1          1                1
-    sex                          1           1          1                1
-    age_start                    1           1          1                1
-    primary_dept                 1           1          1                1
-    ethnic_cat                   1           1          1                1
-    lang_cat                     1           1          1                1
-    race_cat                     1           1          1                1
-    fpl_cat                      1           1          1                1
-    age_cat                      1           1          1                1
-    elig_cervical                1           1          1                1
-    elig_breast                  1           1          1                1
-    elig_colon                   1           1          1                1
-    elig_colonoscopy             1           1          1                1
-    elig_flexsig                 1           1          1                1
-    elig_fobt                    1           1          1                1
-    elig_bmi                     1           1          1                1
-    elig_flu                     1           1          1                1
-    elig_chlam                   1           1          1                1
-    elig_smoking                 1           1          1                1
-    elig_cholest                 1           1          1                1
-    dmap_cervical                0           1          1                1
-    dmap_breast                  1           0          1                1
-    dmap_colon                   1           1          0                1
-    dmap_colonoscopy             1           1          1                0
-    dmap_flexsig                 1           1          1                1
-    dmap_fobt                    1           1          1                1
-    dmap_bmi                     1           1          1                1
-    dmap_flu                     1           1          1                1
-    dmap_chlam                   1           1          1                1
-    dmap_smoking                 1           1          1                1
-    dmap_cholest                 1           1          1                1
-    ehr_cervical                 1           1          1                1
-    ehr_breast                   1           1          1                1
-    ehr_colon                    1           1          1                1
-    ehr_colonoscopy              1           1          1                1
-    ehr_flexsig                  1           1          1                1
-    ehr_fobt                     1           1          1                1
-    ehr_bmi                      1           1          1                1
-    ehr_flu                      1           1          1                1
-    ehr_chlam                    1           1          1                1
-    ehr_smoking                  1           1          1                1
-    ehr_cholest                  1           1          1                1
-                     dmap_flexsig dmap_fobt dmap_bmi dmap_flu dmap_chlam
-    study_id                    1         1        1        1          1
-    sex                         1         1        1        1          1
-    age_start                   1         1        1        1          1
-    primary_dept                1         1        1        1          1
-    ethnic_cat                  1         1        1        1          1
-    lang_cat                    1         1        1        1          1
-    race_cat                    1         1        1        1          1
-    fpl_cat                     1         1        1        1          1
-    age_cat                     1         1        1        1          1
-    elig_cervical               1         1        1        1          1
-    elig_breast                 1         1        1        1          1
-    elig_colon                  1         1        1        1          1
-    elig_colonoscopy            1         1        1        1          1
-    elig_flexsig                1         1        1        1          1
-    elig_fobt                   1         1        1        1          1
-    elig_bmi                    1         1        1        1          1
-    elig_flu                    1         1        1        1          1
-    elig_chlam                  1         1        1        1          1
-    elig_smoking                1         1        1        1          1
-    elig_cholest                1         1        1        1          1
-    dmap_cervical               1         1        1        1          1
-    dmap_breast                 1         1        1        1          1
-    dmap_colon                  1         1        1        1          1
-    dmap_colonoscopy            1         1        1        1          1
-    dmap_flexsig                0         1        1        1          1
-    dmap_fobt                   1         0        1        1          1
-    dmap_bmi                    1         1        0        1          1
-    dmap_flu                    1         1        1        0          1
-    dmap_chlam                  1         1        1        1          0
-    dmap_smoking                1         1        1        1          1
-    dmap_cholest                1         1        1        1          1
-    ehr_cervical                1         1        1        1          1
-    ehr_breast                  1         1        1        1          1
-    ehr_colon                   1         1        1        1          1
-    ehr_colonoscopy             1         1        1        1          1
-    ehr_flexsig                 1         1        1        1          1
-    ehr_fobt                    1         1        1        1          1
-    ehr_bmi                     1         1        1        1          1
-    ehr_flu                     1         1        1        1          1
-    ehr_chlam                   1         1        1        1          1
-    ehr_smoking                 1         1        1        1          1
-    ehr_cholest                 1         1        1        1          1
-                     dmap_smoking dmap_cholest ehr_cervical ehr_breast
-    study_id                    1            1            1          1
-    sex                         1            1            1          1
-    age_start                   1            1            1          1
-    primary_dept                1            1            1          1
-    ethnic_cat                  1            1            1          1
-    lang_cat                    1            1            1          1
-    race_cat                    1            1            1          1
-    fpl_cat                     1            1            1          1
-    age_cat                     1            1            1          1
-    elig_cervical               1            1            1          1
-    elig_breast                 1            1            1          1
-    elig_colon                  1            1            1          1
-    elig_colonoscopy            1            1            1          1
-    elig_flexsig                1            1            1          1
-    elig_fobt                   1            1            1          1
-    elig_bmi                    1            1            1          1
-    elig_flu                    1            1            1          1
-    elig_chlam                  1            1            1          1
-    elig_smoking                1            1            1          1
-    elig_cholest                1            1            1          1
-    dmap_cervical               1            1            1          1
-    dmap_breast                 1            1            1          1
-    dmap_colon                  1            1            1          1
-    dmap_colonoscopy            1            1            1          1
-    dmap_flexsig                1            1            1          1
-    dmap_fobt                   1            1            1          1
-    dmap_bmi                    1            1            1          1
-    dmap_flu                    1            1            1          1
-    dmap_chlam                  1            1            1          1
-    dmap_smoking                0            1            1          1
-    dmap_cholest                1            0            1          1
-    ehr_cervical                1            1            0          1
-    ehr_breast                  1            1            1          0
-    ehr_colon                   1            1            1          1
-    ehr_colonoscopy             1            1            1          1
-    ehr_flexsig                 1            1            1          1
-    ehr_fobt                    1            1            1          1
-    ehr_bmi                     1            1            1          1
-    ehr_flu                     1            1            1          1
-    ehr_chlam                   1            1            1          1
-    ehr_smoking                 1            1            1          1
-    ehr_cholest                 1            1            1          1
-                     ehr_colon ehr_colonoscopy ehr_flexsig ehr_fobt ehr_bmi
-    study_id                 1               1           1        1       1
-    sex                      1               1           1        1       1
-    age_start                1               1           1        1       1
-    primary_dept             1               1           1        1       1
-    ethnic_cat               1               1           1        1       1
-    lang_cat                 1               1           1        1       1
-    race_cat                 1               1           1        1       1
-    fpl_cat                  1               1           1        1       1
-    age_cat                  1               1           1        1       1
-    elig_cervical            1               1           1        1       1
-    elig_breast              1               1           1        1       1
-    elig_colon               1               1           1        1       1
-    elig_colonoscopy         1               1           1        1       1
-    elig_flexsig             1               1           1        1       1
-    elig_fobt                1               1           1        1       1
-    elig_bmi                 1               1           1        1       1
-    elig_flu                 1               1           1        1       1
-    elig_chlam               1               1           1        1       1
-    elig_smoking             1               1           1        1       1
-    elig_cholest             1               1           1        1       1
-    dmap_cervical            1               1           1        1       1
-    dmap_breast              1               1           1        1       1
-    dmap_colon               1               1           1        1       1
-    dmap_colonoscopy         1               1           1        1       1
-    dmap_flexsig             1               1           1        1       1
-    dmap_fobt                1               1           1        1       1
-    dmap_bmi                 1               1           1        1       1
-    dmap_flu                 1               1           1        1       1
-    dmap_chlam               1               1           1        1       1
-    dmap_smoking             1               1           1        1       1
-    dmap_cholest             1               1           1        1       1
-    ehr_cervical             1               1           1        1       1
-    ehr_breast               1               1           1        1       1
-    ehr_colon                0               1           1        1       1
-    ehr_colonoscopy          1               0           1        1       1
-    ehr_flexsig              1               1           0        1       1
-    ehr_fobt                 1               1           1        0       1
-    ehr_bmi                  1               1           1        1       0
-    ehr_flu                  1               1           1        1       1
-    ehr_chlam                1               1           1        1       1
-    ehr_smoking              1               1           1        1       1
-    ehr_cholest              1               1           1        1       1
-                     ehr_flu ehr_chlam ehr_smoking ehr_cholest
-    study_id               1         1           1           1
-    sex                    1         1           1           1
-    age_start              1         1           1           1
-    primary_dept           1         1           1           1
-    ethnic_cat             1         1           1           1
-    lang_cat               1         1           1           1
-    race_cat               1         1           1           1
-    fpl_cat                1         1           1           1
-    age_cat                1         1           1           1
-    elig_cervical          1         1           1           1
-    elig_breast            1         1           1           1
-    elig_colon             1         1           1           1
-    elig_colonoscopy       1         1           1           1
-    elig_flexsig           1         1           1           1
-    elig_fobt              1         1           1           1
-    elig_bmi               1         1           1           1
-    elig_flu               1         1           1           1
-    elig_chlam             1         1           1           1
-    elig_smoking           1         1           1           1
-    elig_cholest           1         1           1           1
-    dmap_cervical          1         1           1           1
-    dmap_breast            1         1           1           1
-    dmap_colon             1         1           1           1
-    dmap_colonoscopy       1         1           1           1
-    dmap_flexsig           1         1           1           1
-    dmap_fobt              1         1           1           1
-    dmap_bmi               1         1           1           1
-    dmap_flu               1         1           1           1
-    dmap_chlam             1         1           1           1
-    dmap_smoking           1         1           1           1
-    dmap_cholest           1         1           1           1
-    ehr_cervical           1         1           1           1
-    ehr_breast             1         1           1           1
-    ehr_colon              1         1           1           1
-    ehr_colonoscopy        1         1           1           1
-    ehr_flexsig            1         1           1           1
-    ehr_fobt               1         1           1           1
-    ehr_bmi                1         1           1           1
-    ehr_flu                0         1           1           1
-    ehr_chlam              1         0           1           1
-    ehr_smoking            1         1           0           1
-    ehr_cholest            1         1           1           0
+                     race_cat fpl_cat age_cat elig_cervical elig_breast elig_colon
+    study_id                1       1       1             0           1          1
+    sex                     1       1       1             0           1          1
+    age_start               1       1       1             0           1          1
+    primary_dept            1       1       1             0           1          1
+    ethnic_cat              1       1       1             0           1          1
+    lang_cat                1       1       1             0           1          1
+    race_cat                0       1       1             0           1          1
+    fpl_cat                 1       0       1             0           1          1
+    age_cat                 1       1       0             0           1          1
+    elig_cervical           1       1       1             0           1          1
+    elig_breast             1       1       1             0           0          1
+    elig_colon              1       1       1             0           1          0
+    elig_colonoscopy        1       1       1             0           1          1
+    elig_flexsig            1       1       1             0           1          1
+    elig_fobt               1       1       1             0           1          1
+    elig_bmi                1       1       1             0           1          1
+    elig_flu                1       1       1             0           1          1
+    elig_chlam              1       1       1             0           1          1
+    elig_smoking            1       1       1             0           1          1
+    elig_cholest            1       1       1             0           1          1
+    dmap_cervical           1       1       1             0           1          1
+    dmap_breast             1       1       1             0           1          1
+    dmap_colon              1       1       1             0           1          1
+    dmap_colonoscopy        1       1       1             0           1          1
+    dmap_flexsig            1       1       1             0           1          1
+    dmap_fobt               1       1       1             0           1          1
+    dmap_bmi                1       1       1             0           1          1
+    dmap_flu                1       1       1             0           1          1
+    dmap_chlam              1       1       1             0           1          1
+    dmap_smoking            1       1       1             0           1          1
+    dmap_cholest            1       1       1             0           1          1
+    ehr_cervical            1       1       1             0           1          1
+    ehr_breast              1       1       1             0           1          1
+    ehr_colon               1       1       1             0           1          1
+    ehr_colonoscopy         1       1       1             0           1          1
+    ehr_flexsig             1       1       1             0           1          1
+    ehr_fobt                1       1       1             0           1          1
+    ehr_bmi                 1       1       1             0           1          1
+    ehr_flu                 1       1       1             0           1          1
+    ehr_chlam               1       1       1             0           1          1
+    ehr_smoking             1       1       1             0           1          1
+    ehr_cholest             1       1       1             0           1          1
+                     elig_colonoscopy elig_flexsig elig_fobt elig_bmi elig_flu
+    study_id                        0            0         0        0        0
+    sex                             0            0         0        0        0
+    age_start                       0            0         0        0        0
+    primary_dept                    0            0         0        0        0
+    ethnic_cat                      0            0         0        0        0
+    lang_cat                        0            0         0        0        0
+    race_cat                        0            0         0        0        0
+    fpl_cat                         0            0         0        0        0
+    age_cat                         0            0         0        0        0
+    elig_cervical                   0            0         0        0        0
+    elig_breast                     0            0         0        0        0
+    elig_colon                      0            0         0        0        0
+    elig_colonoscopy                0            0         0        0        0
+    elig_flexsig                    0            0         0        0        0
+    elig_fobt                       0            0         0        0        0
+    elig_bmi                        0            0         0        0        0
+    elig_flu                        0            0         0        0        0
+    elig_chlam                      0            0         0        0        0
+    elig_smoking                    0            0         0        0        0
+    elig_cholest                    0            0         0        0        0
+    dmap_cervical                   0            0         0        0        0
+    dmap_breast                     0            0         0        0        0
+    dmap_colon                      0            0         0        0        0
+    dmap_colonoscopy                0            0         0        0        0
+    dmap_flexsig                    0            0         0        0        0
+    dmap_fobt                       0            0         0        0        0
+    dmap_bmi                        0            0         0        0        0
+    dmap_flu                        0            0         0        0        0
+    dmap_chlam                      0            0         0        0        0
+    dmap_smoking                    0            0         0        0        0
+    dmap_cholest                    0            0         0        0        0
+    ehr_cervical                    0            0         0        0        0
+    ehr_breast                      0            0         0        0        0
+    ehr_colon                       0            0         0        0        0
+    ehr_colonoscopy                 0            0         0        0        0
+    ehr_flexsig                     0            0         0        0        0
+    ehr_fobt                        0            0         0        0        0
+    ehr_bmi                         0            0         0        0        0
+    ehr_flu                         0            0         0        0        0
+    ehr_chlam                       0            0         0        0        0
+    ehr_smoking                     0            0         0        0        0
+    ehr_cholest                     0            0         0        0        0
+                     elig_chlam elig_smoking elig_cholest dmap_cervical dmap_breast
+    study_id                  1            0            1             1           1
+    sex                       1            0            1             1           1
+    age_start                 1            0            1             1           1
+    primary_dept              1            0            1             1           1
+    ethnic_cat                1            0            1             1           1
+    lang_cat                  1            0            1             1           1
+    race_cat                  1            0            1             1           1
+    fpl_cat                   1            0            1             1           1
+    age_cat                   1            0            1             1           1
+    elig_cervical             1            0            1             1           1
+    elig_breast               1            0            1             1           1
+    elig_colon                1            0            1             1           1
+    elig_colonoscopy          1            0            1             1           1
+    elig_flexsig              1            0            1             1           1
+    elig_fobt                 1            0            1             1           1
+    elig_bmi                  1            0            1             1           1
+    elig_flu                  1            0            1             1           1
+    elig_chlam                0            0            1             1           1
+    elig_smoking              1            0            1             1           1
+    elig_cholest              1            0            0             1           1
+    dmap_cervical             1            0            1             0           1
+    dmap_breast               1            0            1             1           0
+    dmap_colon                1            0            1             1           1
+    dmap_colonoscopy          1            0            1             1           1
+    dmap_flexsig              1            0            1             1           1
+    dmap_fobt                 1            0            1             1           1
+    dmap_bmi                  1            0            1             1           1
+    dmap_flu                  1            0            1             1           1
+    dmap_chlam                1            0            1             1           1
+    dmap_smoking              1            0            1             1           1
+    dmap_cholest              1            0            1             1           1
+    ehr_cervical              1            0            1             1           1
+    ehr_breast                1            0            1             1           1
+    ehr_colon                 1            0            1             1           1
+    ehr_colonoscopy           1            0            1             1           1
+    ehr_flexsig               1            0            1             1           1
+    ehr_fobt                  1            0            1             1           1
+    ehr_bmi                   1            0            1             1           1
+    ehr_flu                   1            0            1             1           1
+    ehr_chlam                 1            0            1             1           1
+    ehr_smoking               1            0            1             1           1
+    ehr_cholest               1            0            1             1           1
+                     dmap_colon dmap_colonoscopy dmap_flexsig dmap_fobt dmap_bmi
+    study_id                  1                1            1         1        1
+    sex                       1                1            1         1        1
+    age_start                 1                1            1         1        1
+    primary_dept              1                1            1         1        1
+    ethnic_cat                1                1            1         1        1
+    lang_cat                  1                1            1         1        1
+    race_cat                  1                1            1         1        1
+    fpl_cat                   1                1            1         1        1
+    age_cat                   1                1            1         1        1
+    elig_cervical             1                1            1         1        1
+    elig_breast               1                1            1         1        1
+    elig_colon                1                1            1         1        1
+    elig_colonoscopy          1                1            1         1        1
+    elig_flexsig              1                1            1         1        1
+    elig_fobt                 1                1            1         1        1
+    elig_bmi                  1                1            1         1        1
+    elig_flu                  1                1            1         1        1
+    elig_chlam                1                1            1         1        1
+    elig_smoking              1                1            1         1        1
+    elig_cholest              1                1            1         1        1
+    dmap_cervical             1                1            1         1        1
+    dmap_breast               1                1            1         1        1
+    dmap_colon                0                1            1         1        1
+    dmap_colonoscopy          1                0            1         1        1
+    dmap_flexsig              1                1            0         1        1
+    dmap_fobt                 1                1            1         0        1
+    dmap_bmi                  1                1            1         1        0
+    dmap_flu                  1                1            1         1        1
+    dmap_chlam                1                1            1         1        1
+    dmap_smoking              1                1            1         1        1
+    dmap_cholest              1                1            1         1        1
+    ehr_cervical              1                1            1         1        1
+    ehr_breast                1                1            1         1        1
+    ehr_colon                 1                1            1         1        1
+    ehr_colonoscopy           1                1            1         1        1
+    ehr_flexsig               1                1            1         1        1
+    ehr_fobt                  1                1            1         1        1
+    ehr_bmi                   1                1            1         1        1
+    ehr_flu                   1                1            1         1        1
+    ehr_chlam                 1                1            1         1        1
+    ehr_smoking               1                1            1         1        1
+    ehr_cholest               1                1            1         1        1
+                     dmap_flu dmap_chlam dmap_smoking dmap_cholest ehr_cervical
+    study_id                1          1            1            1            1
+    sex                     1          1            1            1            1
+    age_start               1          1            1            1            1
+    primary_dept            1          1            1            1            1
+    ethnic_cat              1          1            1            1            1
+    lang_cat                1          1            1            1            1
+    race_cat                1          1            1            1            1
+    fpl_cat                 1          1            1            1            1
+    age_cat                 1          1            1            1            1
+    elig_cervical           1          1            1            1            1
+    elig_breast             1          1            1            1            1
+    elig_colon              1          1            1            1            1
+    elig_colonoscopy        1          1            1            1            1
+    elig_flexsig            1          1            1            1            1
+    elig_fobt               1          1            1            1            1
+    elig_bmi                1          1            1            1            1
+    elig_flu                1          1            1            1            1
+    elig_chlam              1          1            1            1            1
+    elig_smoking            1          1            1            1            1
+    elig_cholest            1          1            1            1            1
+    dmap_cervical           1          1            1            1            1
+    dmap_breast             1          1            1            1            1
+    dmap_colon              1          1            1            1            1
+    dmap_colonoscopy        1          1            1            1            1
+    dmap_flexsig            1          1            1            1            1
+    dmap_fobt               1          1            1            1            1
+    dmap_bmi                1          1            1            1            1
+    dmap_flu                0          1            1            1            1
+    dmap_chlam              1          0            1            1            1
+    dmap_smoking            1          1            0            1            1
+    dmap_cholest            1          1            1            0            1
+    ehr_cervical            1          1            1            1            0
+    ehr_breast              1          1            1            1            1
+    ehr_colon               1          1            1            1            1
+    ehr_colonoscopy         1          1            1            1            1
+    ehr_flexsig             1          1            1            1            1
+    ehr_fobt                1          1            1            1            1
+    ehr_bmi                 1          1            1            1            1
+    ehr_flu                 1          1            1            1            1
+    ehr_chlam               1          1            1            1            1
+    ehr_smoking             1          1            1            1            1
+    ehr_cholest             1          1            1            1            1
+                     ehr_breast ehr_colon ehr_colonoscopy ehr_flexsig ehr_fobt
+    study_id                  1         1               1           1        1
+    sex                       1         1               1           1        1
+    age_start                 1         1               1           1        1
+    primary_dept              1         1               1           1        1
+    ethnic_cat                1         1               1           1        1
+    lang_cat                  1         1               1           1        1
+    race_cat                  1         1               1           1        1
+    fpl_cat                   1         1               1           1        1
+    age_cat                   1         1               1           1        1
+    elig_cervical             1         1               1           1        1
+    elig_breast               1         1               1           1        1
+    elig_colon                1         1               1           1        1
+    elig_colonoscopy          1         1               1           1        1
+    elig_flexsig              1         1               1           1        1
+    elig_fobt                 1         1               1           1        1
+    elig_bmi                  1         1               1           1        1
+    elig_flu                  1         1               1           1        1
+    elig_chlam                1         1               1           1        1
+    elig_smoking              1         1               1           1        1
+    elig_cholest              1         1               1           1        1
+    dmap_cervical             1         1               1           1        1
+    dmap_breast               1         1               1           1        1
+    dmap_colon                1         1               1           1        1
+    dmap_colonoscopy          1         1               1           1        1
+    dmap_flexsig              1         1               1           1        1
+    dmap_fobt                 1         1               1           1        1
+    dmap_bmi                  1         1               1           1        1
+    dmap_flu                  1         1               1           1        1
+    dmap_chlam                1         1               1           1        1
+    dmap_smoking              1         1               1           1        1
+    dmap_cholest              1         1               1           1        1
+    ehr_cervical              1         1               1           1        1
+    ehr_breast                0         1               1           1        1
+    ehr_colon                 1         0               1           1        1
+    ehr_colonoscopy           1         1               0           1        1
+    ehr_flexsig               1         1               1           0        1
+    ehr_fobt                  1         1               1           1        0
+    ehr_bmi                   1         1               1           1        1
+    ehr_flu                   1         1               1           1        1
+    ehr_chlam                 1         1               1           1        1
+    ehr_smoking               1         1               1           1        1
+    ehr_cholest               1         1               1           1        1
+                     ehr_bmi ehr_flu ehr_chlam ehr_smoking ehr_cholest
+    study_id               1       1         1           1           1
+    sex                    1       1         1           1           1
+    age_start              1       1         1           1           1
+    primary_dept           1       1         1           1           1
+    ethnic_cat             1       1         1           1           1
+    lang_cat               1       1         1           1           1
+    race_cat               1       1         1           1           1
+    fpl_cat                1       1         1           1           1
+    age_cat                1       1         1           1           1
+    elig_cervical          1       1         1           1           1
+    elig_breast            1       1         1           1           1
+    elig_colon             1       1         1           1           1
+    elig_colonoscopy       1       1         1           1           1
+    elig_flexsig           1       1         1           1           1
+    elig_fobt              1       1         1           1           1
+    elig_bmi               1       1         1           1           1
+    elig_flu               1       1         1           1           1
+    elig_chlam             1       1         1           1           1
+    elig_smoking           1       1         1           1           1
+    elig_cholest           1       1         1           1           1
+    dmap_cervical          1       1         1           1           1
+    dmap_breast            1       1         1           1           1
+    dmap_colon             1       1         1           1           1
+    dmap_colonoscopy       1       1         1           1           1
+    dmap_flexsig           1       1         1           1           1
+    dmap_fobt              1       1         1           1           1
+    dmap_bmi               1       1         1           1           1
+    dmap_flu               1       1         1           1           1
+    dmap_chlam             1       1         1           1           1
+    dmap_smoking           1       1         1           1           1
+    dmap_cholest           1       1         1           1           1
+    ehr_cervical           1       1         1           1           1
+    ehr_breast             1       1         1           1           1
+    ehr_colon              1       1         1           1           1
+    ehr_colonoscopy        1       1         1           1           1
+    ehr_flexsig            1       1         1           1           1
+    ehr_fobt               1       1         1           1           1
+    ehr_bmi                0       1         1           1           1
+    ehr_flu                1       0         1           1           1
+    ehr_chlam              1       1         0           1           1
+    ehr_smoking            1       1         1           0           1
+    ehr_cholest            1       1         1           1           0
 
 Specify the imputation model
 ----------------------------
@@ -1558,28 +1516,28 @@ diag(pred) <- 0    # set the diagonal to zero (can't predict itself)
 head(pred[, 1:10], n = 10)
 ```
 
-                  study_id sex age_start primary_dept ethnic_cat lang_cat
-    study_id             0   1         1            1          1        1
-    sex                  0   0         1            1          1        1
-    age_start            0   1         0            1          1        1
-    primary_dept         0   1         1            0          1        1
-    ethnic_cat           0   1         1            1          0        1
-    lang_cat             0   1         1            1          1        0
-    race_cat             0   1         1            1          1        1
-    fpl_cat              0   1         1            1          1        1
-    age_cat              0   1         1            1          1        1
-    elig_cervical        0   1         1            1          1        1
-                  race_cat fpl_cat age_cat elig_cervical
-    study_id             1       1       0             1
-    sex                  1       1       0             1
-    age_start            1       1       0             1
-    primary_dept         1       1       0             1
-    ethnic_cat           1       1       0             1
-    lang_cat             1       1       0             1
-    race_cat             0       1       0             1
-    fpl_cat              1       0       0             1
-    age_cat              1       1       0             1
-    elig_cervical        1       1       0             0
+                  study_id sex age_start primary_dept ethnic_cat lang_cat race_cat
+    study_id             0   1         1            1          1        1        1
+    sex                  0   0         1            1          1        1        1
+    age_start            0   1         0            1          1        1        1
+    primary_dept         0   1         1            0          1        1        1
+    ethnic_cat           0   1         1            1          0        1        1
+    lang_cat             0   1         1            1          1        0        1
+    race_cat             0   1         1            1          1        1        0
+    fpl_cat              0   1         1            1          1        1        1
+    age_cat              0   1         1            1          1        1        1
+    elig_cervical        0   1         1            1          1        1        1
+                  fpl_cat age_cat elig_cervical
+    study_id            1       0             1
+    sex                 1       0             1
+    age_start           1       0             1
+    primary_dept        1       0             1
+    ethnic_cat          1       0             1
+    lang_cat            1       0             1
+    race_cat            1       0             1
+    fpl_cat             0       0             1
+    age_cat             1       0             1
+    elig_cervical       1       0             0
 
 Note that there are 1s in the matrix for variables that we will not be
 imputing. This will have no impact.
@@ -1629,20 +1587,17 @@ Shown in the next chunk.
 init$visitSequence
 ```
 
-     [1] "study_id"         "sex"              "age_start"       
-     [4] "primary_dept"     "ethnic_cat"       "lang_cat"        
-     [7] "race_cat"         "fpl_cat"          "age_cat"         
-    [10] "elig_cervical"    "elig_breast"      "elig_colon"      
-    [13] "elig_colonoscopy" "elig_flexsig"     "elig_fobt"       
-    [16] "elig_bmi"         "elig_flu"         "elig_chlam"      
-    [19] "elig_smoking"     "elig_cholest"     "dmap_cervical"   
-    [22] "dmap_breast"      "dmap_colon"       "dmap_colonoscopy"
-    [25] "dmap_flexsig"     "dmap_fobt"        "dmap_bmi"        
-    [28] "dmap_flu"         "dmap_chlam"       "dmap_smoking"    
-    [31] "dmap_cholest"     "ehr_cervical"     "ehr_breast"      
-    [34] "ehr_colon"        "ehr_colonoscopy"  "ehr_flexsig"     
-    [37] "ehr_fobt"         "ehr_bmi"          "ehr_flu"         
-    [40] "ehr_chlam"        "ehr_smoking"      "ehr_cholest"     
+     [1] "study_id"         "sex"              "age_start"        "primary_dept"    
+     [5] "ethnic_cat"       "lang_cat"         "race_cat"         "fpl_cat"         
+     [9] "age_cat"          "elig_cervical"    "elig_breast"      "elig_colon"      
+    [13] "elig_colonoscopy" "elig_flexsig"     "elig_fobt"        "elig_bmi"        
+    [17] "elig_flu"         "elig_chlam"       "elig_smoking"     "elig_cholest"    
+    [21] "dmap_cervical"    "dmap_breast"      "dmap_colon"       "dmap_colonoscopy"
+    [25] "dmap_flexsig"     "dmap_fobt"        "dmap_bmi"         "dmap_flu"        
+    [29] "dmap_chlam"       "dmap_smoking"     "dmap_cholest"     "ehr_cervical"    
+    [33] "ehr_breast"       "ehr_colon"        "ehr_colonoscopy"  "ehr_flexsig"     
+    [37] "ehr_fobt"         "ehr_bmi"          "ehr_flu"          "ehr_chlam"       
+    [41] "ehr_smoking"      "ehr_cholest"     
 
 I override this with the following to order things as: FPL -&gt; Race
 -&gt; Ethnicity
@@ -1709,7 +1664,7 @@ imp_full <-
 ```
 
        user  system elapsed 
-    225.885  10.014 237.109 
+    220.891  10.238 232.125 
 
 That’s elapsed time in seconds.
 
@@ -1776,49 +1731,49 @@ dplyr::glimpse(output)
 
     Observations: 70,000
     Variables: 43
-    $ n_imp            <chr> "1", "1", "1", "1", "1", "1", "1", "1", "1", "1…
-    $ study_id         <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, …
-    $ sex              <fct> F, F, M, M, F, M, M, M, M, F, M, F, F, F, M, M,…
-    $ age_start        <int> 44, 22, 34, 47, 36, 50, 42, 29, 27, 38, 48, 63,…
-    $ primary_dept     <fct> 021, 031, 039, 020, 015, 005, 026, 008, 005, 02…
-    $ ethnic_cat       <fct> NH White, NH White, NH White, NH White, NH Whit…
-    $ lang_cat         <fct> English, English, English, English, English, En…
-    $ race_cat         <fct> Black, Black, White, White, White, White, White…
-    $ fpl_cat          <fct> <=138% FPL, <=138% FPL, >138% FPL, <=138% FPL, …
-    $ age_cat          <fct> "[35,51)", "[19,35)", "[19,35)", "[35,51)", "[3…
-    $ elig_cervical    <fct> 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0,…
-    $ elig_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,…
-    $ elig_colon       <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_colonoscopy <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_flexsig     <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_fobt        <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_bmi         <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ elig_flu         <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,…
-    $ elig_chlam       <fct> 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
-    $ elig_smoking     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ elig_cholest     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ dmap_cervical    <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
-    $ dmap_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
-    $ dmap_colon       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_colonoscopy <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_flexsig     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_fobt        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_bmi         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_flu         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-    $ dmap_chlam       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,…
-    $ dmap_smoking     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ dmap_cholest     <fct> 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1,…
-    $ ehr_cervical     <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_breast       <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_colon        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_colonoscopy  <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_flexsig      <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_fobt         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_bmi          <fct> 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0,…
-    $ ehr_flu          <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-    $ ehr_chlam        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    $ ehr_smoking      <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    $ ehr_cholest      <fct> 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,…
+    $ n_imp            <chr> "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1…
+    $ study_id         <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1…
+    $ sex              <fct> F, F, M, M, F, M, M, M, M, F, M, F, F, F, M, M, M, F…
+    $ age_start        <int> 44, 22, 34, 47, 36, 50, 42, 29, 27, 38, 48, 63, 42, …
+    $ primary_dept     <fct> 021, 031, 039, 020, 015, 005, 026, 008, 005, 024, 03…
+    $ ethnic_cat       <fct> NH White, NH White, NH White, NH White, NH White, NH…
+    $ lang_cat         <fct> English, English, English, English, English, English…
+    $ race_cat         <fct> Black, Black, White, White, White, White, White, Whi…
+    $ fpl_cat          <fct> <=138% FPL, <=138% FPL, >138% FPL, <=138% FPL, <=138…
+    $ age_cat          <fct> "[35,51)", "[19,35)", "[19,35)", "[35,51)", "[35,51)…
+    $ elig_cervical    <fct> 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1…
+    $ elig_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1…
+    $ elig_colon       <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_colonoscopy <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_flexsig     <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_fobt        <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_bmi         <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ elig_flu         <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+    $ elig_chlam       <fct> 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
+    $ elig_smoking     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ elig_cholest     <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ dmap_cervical    <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
+    $ dmap_breast      <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1…
+    $ dmap_colon       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_colonoscopy <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_flexsig     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_fobt        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1…
+    $ dmap_bmi         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_flu         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0…
+    $ dmap_chlam       <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
+    $ dmap_smoking     <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ dmap_cholest     <fct> 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0…
+    $ ehr_cervical     <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_breast       <fct> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_colon        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1…
+    $ ehr_colonoscopy  <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_flexsig      <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_fobt         <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_bmi          <fct> 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1…
+    $ ehr_flu          <fct> 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1…
+    $ ehr_chlam        <fct> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    $ ehr_smoking      <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    $ ehr_cholest      <fct> 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0…
 
 ``` r
 # dim(output)
@@ -1875,18 +1830,19 @@ output_nested %>%
 ```
 
     # A tibble: 10 x 5
-       proc     cat   level n_imp data                 
-       <chr>    <chr> <chr> <chr> <list>               
-     1 cervical all   all   1     <tibble [14,000 × 6]>
-     2 cervical all   all   2     <tibble [14,000 × 6]>
-     3 cervical all   all   3     <tibble [14,000 × 6]>
-     4 cervical all   all   4     <tibble [14,000 × 6]>
-     5 cervical all   all   5     <tibble [14,000 × 6]>
-     6 breast   all   all   1     <tibble [14,000 × 6]>
-     7 breast   all   all   2     <tibble [14,000 × 6]>
-     8 breast   all   all   3     <tibble [14,000 × 6]>
-     9 breast   all   all   4     <tibble [14,000 × 6]>
-    10 breast   all   all   5     <tibble [14,000 × 6]>
+    # Groups:   n_imp, proc, cat, level [10]
+       n_imp proc     cat   level data                 
+       <chr> <chr>    <chr> <chr> <list>               
+     1 1     cervical all   all   <tibble [14,000 × 6]>
+     2 2     cervical all   all   <tibble [14,000 × 6]>
+     3 3     cervical all   all   <tibble [14,000 × 6]>
+     4 4     cervical all   all   <tibble [14,000 × 6]>
+     5 5     cervical all   all   <tibble [14,000 × 6]>
+     6 1     breast   all   all   <tibble [14,000 × 6]>
+     7 2     breast   all   all   <tibble [14,000 × 6]>
+     8 3     breast   all   all   <tibble [14,000 × 6]>
+     9 4     breast   all   all   <tibble [14,000 × 6]>
+    10 5     breast   all   all   <tibble [14,000 × 6]>
 
 ``` r
 # df_nested$data[[1]]
@@ -1910,18 +1866,19 @@ output_nested %>%
 ```
 
     # A tibble: 10 x 7
-       proc     cat   level n_imp data              Q             U            
-       <chr>    <chr> <chr> <chr> <list>            <list>        <list>       
-     1 cervical all   all   1     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     2 cervical all   all   2     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     3 cervical all   all   3     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     4 cervical all   all   4     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     5 cervical all   all   5     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     6 breast   all   all   1     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     7 breast   all   all   2     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     8 breast   all   all   3     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-     9 breast   all   all   4     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
-    10 breast   all   all   5     <tibble [14,000 … <df[,2] [23 … <df[,2] [23 …
+    # Groups:   n_imp, proc, cat, level [10]
+       n_imp proc     cat   level data               Q               U              
+       <chr> <chr>    <chr> <chr> <list>             <list>          <list>         
+     1 1     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     2 2     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     3 3     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     4 4     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     5 5     cervical all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     6 1     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     7 2     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     8 3     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+     9 4     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
+    10 5     breast   all   all   <tibble [14,000 ×… <df[,2] [23 × … <df[,2] [23 × …
 
 ``` r
 # output_nested$Q[[1]]
@@ -1942,19 +1899,20 @@ output_nested %>%
   head(., n = 10)
 ```
 
-    # A tibble: 10 x 7
-       proc     cat   level n_imp stat            Q     U
-       <chr>    <chr> <chr> <chr> <chr>       <dbl> <dbl>
-     1 cervical all   all   1     n       14000         0
-     2 cervical all   all   1     a         844         0
-     3 cervical all   all   1     b        1980         0
-     4 cervical all   all   1     c        1893         0
-     5 cervical all   all   1     d        9283         0
-     6 cervical all   all   1     EHR.n    2824         0
-     7 cervical all   all   1     EHR.p       0.202     0
-     8 cervical all   all   1     DMAP.n   2737         0
-     9 cervical all   all   1     DMAP.p      0.196     0
-    10 cervical all   all   1     Combo.n  4717         0
+    # A tibble: 10 x 8
+    # Groups:   n_imp, proc, cat, level [1]
+       n_imp proc     cat   level data                  stat            Q     U
+       <chr> <chr>    <chr> <chr> <list>                <chr>       <dbl> <dbl>
+     1 1     cervical all   all   <tibble [14,000 × 6]> n       14000         0
+     2 1     cervical all   all   <tibble [14,000 × 6]> a         844         0
+     3 1     cervical all   all   <tibble [14,000 × 6]> b        1980         0
+     4 1     cervical all   all   <tibble [14,000 × 6]> c        1893         0
+     5 1     cervical all   all   <tibble [14,000 × 6]> d        9283         0
+     6 1     cervical all   all   <tibble [14,000 × 6]> EHR.n    2824         0
+     7 1     cervical all   all   <tibble [14,000 × 6]> EHR.p       0.202     0
+     8 1     cervical all   all   <tibble [14,000 × 6]> DMAP.n   2737         0
+     9 1     cervical all   all   <tibble [14,000 × 6]> DMAP.p      0.196     0
+    10 1     cervical all   all   <tibble [14,000 × 6]> Combo.n  4717         0
 
 We want to re-`group_by` the data by procedure, category, level, and
 type of statistic. This step gives us the nested estimates and variances
@@ -1982,18 +1940,19 @@ output_nested %>%
 ```
 
     # A tibble: 10 x 5
+    # Groups:   proc, cat, level, stat [10]
        proc     cat   level stat    data            
        <chr>    <chr> <chr> <chr>   <list>          
-     1 cervical all   all   n       <tibble [5 × 3]>
-     2 cervical all   all   a       <tibble [5 × 3]>
-     3 cervical all   all   b       <tibble [5 × 3]>
-     4 cervical all   all   c       <tibble [5 × 3]>
-     5 cervical all   all   d       <tibble [5 × 3]>
-     6 cervical all   all   EHR.n   <tibble [5 × 3]>
-     7 cervical all   all   EHR.p   <tibble [5 × 3]>
-     8 cervical all   all   DMAP.n  <tibble [5 × 3]>
-     9 cervical all   all   DMAP.p  <tibble [5 × 3]>
-    10 cervical all   all   Combo.n <tibble [5 × 3]>
+     1 cervical all   all   n       <tibble [5 × 4]>
+     2 cervical all   all   a       <tibble [5 × 4]>
+     3 cervical all   all   b       <tibble [5 × 4]>
+     4 cervical all   all   c       <tibble [5 × 4]>
+     5 cervical all   all   d       <tibble [5 × 4]>
+     6 cervical all   all   EHR.n   <tibble [5 × 4]>
+     7 cervical all   all   EHR.p   <tibble [5 × 4]>
+     8 cervical all   all   DMAP.n  <tibble [5 × 4]>
+     9 cervical all   all   DMAP.p  <tibble [5 × 4]>
+    10 cervical all   all   Combo.n <tibble [5 × 4]>
 
 Unnest the pooled results, we see that for each procedure, by category,
 by strata, we have for each statistic, the results that the pooling in
@@ -2004,7 +1963,8 @@ output_nested <- output_nested %>%
   tidyr::unnest(pooled)
 ```
 
-    Error: object 'pooled' not found
+    Error: Can't subset columns that don't exist.
+    [31mx[39m The column `pooled` doesn't exist.
 
 ``` r
 output_nested %>% 
@@ -2014,10 +1974,11 @@ output_nested %>%
 
     Observations: 4,807
     Variables: 4
-    $ proc  <chr> "cervical", "cervical", "cervical", "cervical", "cervical"…
-    $ cat   <chr> "all", "all", "all", "all", "all", "all", "all", "all", "a…
-    $ level <chr> "all", "all", "all", "all", "all", "all", "all", "all", "a…
-    $ stat  <chr> "n", "a", "b", "c", "d", "EHR.n", "EHR.p", "DMAP.n", "DMAP…
+    Groups: proc, cat, level, stat [4,807]
+    $ proc  <chr> "cervical", "cervical", "cervical", "cervical", "cervical", "ce…
+    $ cat   <chr> "all", "all", "all", "all", "all", "all", "all", "all", "all", …
+    $ level <chr> "all", "all", "all", "all", "all", "all", "all", "all", "all", …
+    $ stat  <chr> "n", "a", "b", "c", "d", "EHR.n", "EHR.p", "DMAP.n", "DMAP.p", …
 
 The value `qbar` is the pooled post-imputation estimate that we are most
 interested. See the `mice` documenation for information on the rest. So
@@ -2045,7 +2006,8 @@ output_nested %>%
   )
 ```
 
-    Error in .f(.x[[i]], ...): object 'qbar' not found
+    Error: Can't subset columns that don't exist.
+    [31mx[39m The column `qbar` doesn't exist.
 
 Well, the procedures and the categories need should be arranged
 differently for formal presentation. But that’s pretty straightforward
@@ -2065,4 +2027,4 @@ lubridate::as.period(
   )
 ```
 
-    [1] "5M 0.0119600296020508S"
+    [1] "4M 54.0344290733337S"
